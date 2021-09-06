@@ -1,11 +1,21 @@
 import React from "react";
+import {IBrowseResult, IBrowseStruc} from "../misc/interfaces";
+import wrench from "../assets/images/wrench32.png";
+import doc from "../assets/images/linedpaper32.png";
+import back from "../assets/images/leftarrow32.png";
+import {Base64} from "js-base64";
 
-function Search() {
+
+
+function Search(props: { datasetID: string }) {
+
+
+
     return (
         <div>
             <div className="hcContentContainer">
                 <div className="hcBasicSideMargin hcMarginTop4 hcMarginBottom1">
-                    <h1>Manuscript search</h1>
+                    <h1>DWC search</h1>
                 </div>
 
                 <div className="hcLayoutFacet-Result hcBasicSideMargin hcMarginBottom15">

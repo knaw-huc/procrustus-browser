@@ -22,7 +22,10 @@ function PageHeader() {
                 <span>
                 <span className="hcSmallTxt hcTxtColorGreyMid">Dataset</span>
                     <select className="" name="">
-                        <option value="">Manuscripts eCodices NL</option>
+                        <option value="dwc">DWC data</option>
+                        <option value="delegates">Delegates</option>
+                        <option value="delegates">Abbr. delegates</option>
+                        <option value="delegates">Sessions</option>
                     </select>
                 </span>
                 </div>
