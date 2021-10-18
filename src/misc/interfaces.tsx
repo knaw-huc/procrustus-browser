@@ -70,3 +70,18 @@ export interface ISearchString {
     dataset_id: string,
     page: number
 }
+
+export interface ICollection {
+    collection: string,
+    label: string
+}
+
+export interface IDataSet {
+    dataSet: string,
+    label: string,
+    indexes: ICollection[]
+}
+
+export interface IStore {
+    dataSets: IDataSet[]
+}

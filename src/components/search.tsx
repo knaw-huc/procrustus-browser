@@ -1,4 +1,7 @@
 import React from "react";
+import {useState, useEffect} from "react";
+import {SERVICE_SERVER} from "../misc/config";
+import {IStore} from "../misc/interfaces";
 import {IBrowseResult, IBrowseStruc} from "../misc/interfaces";
 import wrench from "../assets/images/wrench32.png";
 import doc from "../assets/images/linedpaper32.png";
@@ -6,16 +9,52 @@ import back from "../assets/images/leftarrow32.png";
 import {Base64} from "js-base64";
 
 
-
 function Search(props: { datasetID: string }) {
 
+    const [storeLoading, setStoreLoading] = useState(true);
+    const [store, setStore] = useState<IStore>({"dataSets": []})
+
+    async function fetchStore() {
+        const url = SERVICE_SERVER + "get_store";
+        const response = await fetch(url);
+        const resp_store = await response.json();
+        setStore(resp_store);
+        setStoreLoading(false)
+    }
+
+    
 
 
     return (
         <div>
+            <div className="hcContentContainer hcMarginBottom5 hcBorderBottom">
+                {!storeLoading && (<div className="hcBarDataset hcBasicSideMargin">
+                <span>
+                <span className="hcSmallTxt hcTxtColorGreyMid">Dataset</span>
+                    <select className="" name="">
+                    {store.dataSets.map((item, index) => {
+                        return (<option key={index} value={item.dataSet}>{item.label}</option>)
+                    })}
+                    </select>
+                </span><span>
+                <span className="hcSmallTxt hcTxtColorGreyMid">Collections</span>
+                    <select className="" name="">
+                        <option value="">Persons</option>
+                        <option value="">Places</option>
+                        <option value="">Education</option>
+                        <option value="">Institutes</option>
+                        <option value="">Occupation</option>
+                        <option value="">Membership</option>
+                    </select>
+                </span>
+                </div>)}
+
+            </div>
+
+
             <div className="hcContentContainer">
                 <div className="hcBasicSideMargin hcMarginTop4 hcMarginBottom1">
-                    <h1>DWC search</h1>
+                    <h1>Search</h1>
                 </div>
 
                 <div className="hcLayoutFacet-Result hcBasicSideMargin hcMarginBottom15">
@@ -23,13 +62,13 @@ function Search(props: { datasetID: string }) {
                     <div className="hcLayoutFacets">
                         <button type="button" name="button" id="showFacets" className="hcfixedSideButton"><img
                             src="https://d33wubrfki0l68.cloudfront.net/191a405740a4ade92836ba6eea6a6ceaa798bf2f/a4d8b/images/icons/icon-set-facets.svg"
-                            className="icon" /></button>
+                            className="icon"/></button>
                         <div className="hcLayoutFacetsToggel" id="hcLayoutFacetsToggel">
                             <div className="hcFacet">
                                 <div className="hcFacetTitle">Text search</div>
                                 <div className="hcFacetSearch">
                                     <input type="text" name="" value=""/>
-                                        <button type="button" name="button">Search</button>
+                                    <button type="button" name="button">Search</button>
                                 </div>
                             </div>
                         </div>
