@@ -1,7 +1,7 @@
 import React from "react";
 import {useState, useEffect} from "react";
 import {SERVICE_SERVER} from "../misc/config";
-import {IStore} from "../misc/interfaces";
+import {IStore, ICollection} from "../misc/interfaces";
 import {IBrowseResult, IBrowseStruc} from "../misc/interfaces";
 import wrench from "../assets/images/wrench32.png";
 import doc from "../assets/images/linedpaper32.png";
@@ -13,16 +13,32 @@ function Search(props: { datasetID: string }) {
 
     const [storeLoading, setStoreLoading] = useState(true);
     const [store, setStore] = useState<IStore>({"dataSets": []})
+    const [refresh, setRefresh] = useState(false);
+    const [datasetIndex, setDatasetIndex] = useState(0);
+    const [collections, setCollections] = useState<ICollection[]>([]);
+    const [esIndex, setEsIndex] = useState("none");
 
     async function fetchStore() {
-        const url = SERVICE_SERVER + "get_store";
-        const response = await fetch(url);
-        const resp_store = await response.json();
-        setStore(resp_store);
-        setStoreLoading(false)
+        if (storeLoading) {
+            const url = SERVICE_SERVER + "get_store";
+            const response = await fetch(url);
+            const resp_store: IStore = await response.json();
+            setStore(resp_store);
+            setStoreLoading(false);
+            setCollections(store.dataSets[datasetIndex].indexes);
+            setEsIndex(store.dataSets[datasetIndex].indexes[0].collection);
+        }
+        setCollections(store.dataSets[datasetIndex].indexes);
+        setEsIndex(store.dataSets[datasetIndex].indexes[0].collection);
+
     }
 
-    
+
+
+    useEffect(() => {
+            fetchStore();
+    }, [refresh]);
+
 
 
     return (
@@ -31,20 +47,17 @@ function Search(props: { datasetID: string }) {
                 {!storeLoading && (<div className="hcBarDataset hcBasicSideMargin">
                 <span>
                 <span className="hcSmallTxt hcTxtColorGreyMid">Dataset</span>
-                    <select className="" name="">
+                    <select className="" name="" onChange={(event => {setDatasetIndex(event.target.selectedIndex); setRefresh(!refresh);})}>
                     {store.dataSets.map((item, index) => {
-                        return (<option key={index} value={item.dataSet}>{item.label}</option>)
+                        return (<option key={index}>{item.label}</option>)
                     })}
                     </select>
                 </span><span>
                 <span className="hcSmallTxt hcTxtColorGreyMid">Collections</span>
                     <select className="" name="">
-                        <option value="">Persons</option>
-                        <option value="">Places</option>
-                        <option value="">Education</option>
-                        <option value="">Institutes</option>
-                        <option value="">Occupation</option>
-                        <option value="">Membership</option>
+                        {collections.map((item, index) => {
+                            return (<option key={index}>{item.label}</option> )
+                        })}
                     </select>
                 </span>
                 </div>)}
