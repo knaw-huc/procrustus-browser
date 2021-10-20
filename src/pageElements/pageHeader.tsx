@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../assets/img/logo-data-huygensing.png';
+import logo from '../assets/img/ga.png';
 
 function PageHeader() {
     return (
@@ -8,7 +8,7 @@ function PageHeader() {
                 <header className=" hcPageHeaderSimple hcBasicSideMargin">
                     <div className="hcBrand">
                         <div className="hcBrandLogo">
-                            <img src={logo} className="logo"/>
+                            <img src={logo} className="galogo"/>
                         </div>
                     </div>
 

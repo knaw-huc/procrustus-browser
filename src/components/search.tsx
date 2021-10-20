@@ -2,13 +2,14 @@ import React from "react";
 import {useState, useEffect} from "react";
 import {SERVICE_SERVER, HOME} from "../misc/config";
 import {IStore, ICollection} from "../misc/interfaces";
-import {IBrowseResult, IBrowseStruc, ISearchObject, IResultList, ISendPage, ISendCandidate, IFacetCandidate, ISearchValues } from "../misc/interfaces";
+import {IBrowseResult, IBrowseStruc, ISearchObject, IResultList, ISendPage, ISendCandidate, IFacetCandidate, ISearchValues, IResetFacets, IRemoveFacet } from "../misc/interfaces";
 import wrench from "../assets/images/wrench32.png";
 import doc from "../assets/images/linedpaper32.png";
 import back from "../assets/images/leftarrow32.png";
 import {Base64} from "js-base64";
 import FreeTextFacet from "../facets/freeTextFacet";
 import SearchResultList from "../elements/searchResultList";
+import Details from "./details";
 
 
 function Search() {
@@ -32,6 +33,7 @@ function Search() {
     const [loading, setLoading] = useState(true);
     const [searchStruc, setSearchStruc] = useState(searchBuffer);
     const [pages, setPages] = useState<number[]>([]);
+    const [details, setDetails] = useState(false);
 
     async function fetchStoreAndData() {
         if (storeLoading) {
@@ -116,7 +118,40 @@ function Search() {
             setDataRefresh(!dataRefresh);
             window.scroll(0, 0);
         }
-        console.log(JSON.stringify(searchBuffer));
+    }
+
+    let facets: ISearchValues[] = [];
+    if (typeof searchStruc.searchvalues === "object") {
+        facets = searchStruc.searchvalues as ISearchValues[];
+    }
+
+    const cross: string = "[x]";
+
+    const resetFacets: IResetFacets = () => {
+        searchBuffer = searchStruc;
+        searchBuffer.page = 1;
+        searchBuffer.searchvalues = "none";
+        setSearchStruc(searchBuffer);
+        setRefresh(!refresh);
+    }
+
+    const removeFacet: IRemoveFacet = (field: string, value: string) => {
+        searchBuffer = searchStruc;
+        if (typeof searchBuffer.searchvalues === "object") {
+            searchBuffer.searchvalues.forEach((item: ISearchValues) => {
+                if (item.name === field) {
+                    item.values = item.values.filter((element => element !== value));
+                }
+            })
+            searchBuffer.searchvalues = searchBuffer.searchvalues.filter(function (el) {
+                return el.values.length > 0
+            });
+            if (searchBuffer.searchvalues.length === 0) {
+                searchBuffer.searchvalues = "none";
+            }
+        }
+        setSearchStruc(searchBuffer);
+        setRefresh(!refresh);
     }
 
     function createPages(json: IResultList) {
@@ -177,8 +212,8 @@ function Search() {
 
             </div>
 
-
-            <div className="hcContentContainer">
+            {details ? (<Details/>) :
+                (<div className="hcContentContainer">
                 <div className="hcBasicSideMargin hcMarginTop4 hcMarginBottom1">
                     <h1>Search</h1>
                 </div>
@@ -200,8 +235,24 @@ function Search() {
 
                         <div className="hcMarginBottom2">
                             <span className="hcSmallTxt hcTxtColorGreyMid">Selected facets:</span>
+                            <span
+                                className="hcFacetReset hcClickable" onClick={resetFacets}>Reset facets</span>
                         </div>
-
+                        {searchStruc.searchvalues === "none" ? (
+                            <div/>
+                        ) : (
+                            facets.map((item: ISearchValues) => {
+                                return (
+                                    <span className="hcSelectedFacet"><span
+                                        className="hcSelectedFacetType">{item.name}: </span>
+                                        {item.values.map(function (element, i) {
+                                            return (<div className="hcFacetValues" key={i}
+                                                         onClick={() => removeFacet(item.name, element)}>{element}  </div>)
+                                        })}
+                                    </span>
+                                )
+                            })
+                        )}
                         <div className="hcList">
                             <div className="hcListHeader">
                                 <div className="hcLabel hcListItemLong">Title</div>
@@ -237,7 +288,7 @@ function Search() {
                         ) : (<div/>)}
                     </div>
                 </div>
-            </div>
+            </div>)}
         </div>
     )
 }

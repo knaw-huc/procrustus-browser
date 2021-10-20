@@ -8,7 +8,6 @@ function SearchPage() {
         <div>
             <PageHeader />
             <Search/>
-            <PageFooter />
         </div>
     )
 }

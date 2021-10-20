@@ -1,0 +1,22 @@
+.hcFacetReset {
+float: right;
+}
+
+.hcClickable {
+color: #0087d4;
+cursor: pointer;
+display: inline-block;
+margin-bottom: 16px !important;
+}
+
+.hcFacetValues {
+margin-right: 6px;
+}
+
+.detLabel {
+font-weight: bold;
+}
+
+.galogo {
+height: 20px;
+}
