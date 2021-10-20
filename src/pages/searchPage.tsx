@@ -7,7 +7,7 @@ function SearchPage() {
     return (
         <div>
             <PageHeader />
-            <Search datasetID="dwc"/>
+            <Search/>
             <PageFooter />
         </div>
     )

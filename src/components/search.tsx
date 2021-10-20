@@ -1,45 +1,158 @@
 import React from "react";
 import {useState, useEffect} from "react";
-import {SERVICE_SERVER} from "../misc/config";
+import {SERVICE_SERVER, HOME} from "../misc/config";
 import {IStore, ICollection} from "../misc/interfaces";
-import {IBrowseResult, IBrowseStruc} from "../misc/interfaces";
+import {IBrowseResult, IBrowseStruc, ISearchObject, IResultList, ISendPage, ISendCandidate, IFacetCandidate, ISearchValues } from "../misc/interfaces";
 import wrench from "../assets/images/wrench32.png";
 import doc from "../assets/images/linedpaper32.png";
 import back from "../assets/images/leftarrow32.png";
 import {Base64} from "js-base64";
+import FreeTextFacet from "../facets/freeTextFacet";
+import SearchResultList from "../elements/searchResultList";
 
 
-function Search(props: { datasetID: string }) {
+function Search() {
 
+    let searchBuffer: ISearchObject = {
+        searchvalues: "none",
+        page: 1,
+        page_length: 30,
+        sortorder: "title",
+        index: ""
+    };
     const [storeLoading, setStoreLoading] = useState(true);
     const [store, setStore] = useState<IStore>({"dataSets": []})
     const [refresh, setRefresh] = useState(false);
+    const [dataRefresh, setDataRefresh] = useState(false);
     const [datasetIndex, setDatasetIndex] = useState(0);
     const [collections, setCollections] = useState<ICollection[]>([]);
     const [esIndex, setEsIndex] = useState("none");
+    //const [page, setPage] = useState(1);
+    const [result, setResult] = useState<IResultList>({amount: 0} as IResultList);
+    const [loading, setLoading] = useState(true);
+    const [searchStruc, setSearchStruc] = useState(searchBuffer);
+    const [pages, setPages] = useState<number[]>([]);
 
-    async function fetchStore() {
+    async function fetchStoreAndData() {
         if (storeLoading) {
             const url = SERVICE_SERVER + "get_store";
             const response = await fetch(url);
             const resp_store: IStore = await response.json();
             setStore(resp_store);
+            setCollections(resp_store.dataSets[0].indexes);
             setStoreLoading(false);
+            setEsIndex(resp_store.dataSets[0].indexes[0].collection);
+        } else {
             setCollections(store.dataSets[datasetIndex].indexes);
             setEsIndex(store.dataSets[datasetIndex].indexes[0].collection);
+            searchBuffer.page = 1;
+            setSearchStruc(searchBuffer);
         }
-        setCollections(store.dataSets[datasetIndex].indexes);
-        setEsIndex(store.dataSets[datasetIndex].indexes[0].collection);
+        setDataRefresh(!dataRefresh);
+    }
 
+    async function fetchData() {
+        if (!storeLoading) {
+            searchStruc.index = esIndex;
+            const url = SERVICE_SERVER + "browse";
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Origin': HOME
+                },
+                body: JSON.stringify(searchStruc)
+                });
+            const json: IResultList = await response.json();
+            setResult(json);
+            setPages(createPages(json));
+            setLoading(false);
+        }
     }
 
 
-
     useEffect(() => {
-            fetchStore();
+        fetchStoreAndData();
     }, [refresh]);
 
+    useEffect(() => {
+        fetchData();
+        },
+        [storeLoading, dataRefresh]);
 
+    const sendCandidate: ISendCandidate = (candidate: IFacetCandidate) => {
+        searchBuffer = searchStruc;
+        if (searchStruc.searchvalues === "none") {
+            searchBuffer.searchvalues = [{
+                name: candidate.facet,
+                field: candidate.field,
+                values: [candidate.candidate]
+            } as ISearchValues];
+            setSearchStruc(searchBuffer);
+            //window.location.href = '#search/' + Base64.toBase64(JSON.stringify(searchStruc));
+            setDataRefresh(!dataRefresh);
+        } else {
+            if (typeof searchBuffer.searchvalues === "object") {
+                let found: boolean = false;
+                searchBuffer.searchvalues.forEach((item) => {
+                    if (item.name === candidate.facet) {
+                        found = true;
+                        if (!item.values.includes(candidate.candidate)) {
+                            item.values.push(candidate.candidate);
+                        }
+                    }
+                });
+                if (!found) {
+                    searchBuffer.searchvalues.push({
+                        name: candidate.facet,
+                        field: candidate.field,
+                        values: [candidate.candidate]
+                    });
+                }
+            }
+            searchBuffer.page = 1;
+            setSearchStruc(searchBuffer);
+            setDataRefresh(!dataRefresh);
+            window.scroll(0, 0);
+        }
+        console.log(JSON.stringify(searchBuffer));
+    }
+
+    function createPages(json: IResultList) {
+        let arr: number[] = [];
+        for (var i: number = 1; i <= json.pages; i++) {
+            arr.push(i);
+        }
+        return arr;
+    }
+
+    function nextPage() {
+        goToPage(searchStruc.page + 1);
+    }
+
+    function selectPage(item: string) {
+        const pg: number = Number(item);
+        if (pg != NaN) {
+            goToPage(pg);
+        }
+    }
+
+    function prevPage() {
+        if (searchStruc.page > 0) {
+            goToPage(searchStruc.page - 1);
+        }
+    }
+
+
+    const goToPage: ISendPage = (page: number) => {
+        searchBuffer = searchStruc;
+        searchBuffer.page = page;
+        setSearchStruc(searchBuffer);
+        setDataRefresh(!dataRefresh);
+        //window.location.href = '#search/' + Base64.toBase64(JSON.stringify(searchStruc));
+        window.scroll(0, 0);
+    }
 
     return (
         <div>
@@ -47,14 +160,14 @@ function Search(props: { datasetID: string }) {
                 {!storeLoading && (<div className="hcBarDataset hcBasicSideMargin">
                 <span>
                 <span className="hcSmallTxt hcTxtColorGreyMid">Dataset</span>
-                    <select className="" name="" onChange={(event => {setDatasetIndex(event.target.selectedIndex); setRefresh(!refresh);})}>
+                    <select className="" name="" onChange={(event) => {setDatasetIndex(event.target.selectedIndex); setRefresh(!refresh);}}>
                     {store.dataSets.map((item, index) => {
                         return (<option key={index}>{item.label}</option>)
                     })}
                     </select>
                 </span><span>
                 <span className="hcSmallTxt hcTxtColorGreyMid">Collections</span>
-                    <select className="" name="">
+                    <select className="" name="" onChange={(event) => {setEsIndex(store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection); setDataRefresh(!dataRefresh);}}>
                         {collections.map((item, index) => {
                             return (<option key={index}>{item.label}</option> )
                         })}
@@ -73,29 +186,16 @@ function Search(props: { datasetID: string }) {
                 <div className="hcLayoutFacet-Result hcBasicSideMargin hcMarginBottom15">
 
                     <div className="hcLayoutFacets">
-                        <button type="button" name="button" id="showFacets" className="hcfixedSideButton"><img
-                            src="https://d33wubrfki0l68.cloudfront.net/191a405740a4ade92836ba6eea6a6ceaa798bf2f/a4d8b/images/icons/icon-set-facets.svg"
-                            className="icon"/></button>
-                        <div className="hcLayoutFacetsToggel" id="hcLayoutFacetsToggel">
-                            <div className="hcFacet">
-                                <div className="hcFacetTitle">Text search</div>
-                                <div className="hcFacetSearch">
-                                    <input type="text" name="" value=""/>
-                                    <button type="button" name="button">Search</button>
-                                </div>
-                            </div>
-                        </div>
+                        <FreeTextFacet add={sendCandidate}/>
                     </div>
-
-
                     <div className="hcLayoutResults">
                         <div className="hcResultsHeader hcMarginBottom1">
-                            <div>5.666 Results</div>
-                            <div><select className="" name="">
+                            <div>{result.amount} Results, page {searchStruc.page} of {result.pages} pages</div>
+                           {/* <div><select className="" name="">
                                 <option value="">Order by Relevance</option>
                                 <option value="">Order by given name</option>
                                 <option value="">Order by family name</option>
-                            </select></div>
+                            </select></div>*/}
                         </div>
 
                         <div className="hcMarginBottom2">
@@ -105,71 +205,36 @@ function Search(props: { datasetID: string }) {
                         <div className="hcList">
                             <div className="hcListHeader">
                                 <div className="hcLabel hcListItemLong">Title</div>
-                                <div className="hcLabel">Place</div>
-                                <div className="hcLabel">Date</div>
+                                <div className="hcLabel">URI</div>
                             </div>
                         </div>
 
                         <div className="hcLists hcMarginBottom2">
-
-                            <div className="hcColumnsAuto hcPointer hcRowCard">
-                                <div className="hcCell--x2"><strong>Leiden, UB : ms. VLF 70 : I-A</strong></div>
-                                <div>Orléanais</div>
-                                <div>0900-1000 $ [10th century]</div>
-                            </div>
-                            <div className="hcColumnsAuto hcPointer hcRowCard">
-                                <div className="hcCell--x2"><strong>Utrecht, UB : Cat. 117</strong>
-                                </div>
-                                <div>Northern Netherlands</div>
-                                <div>1489-1490</div>
-                            </div>
-                            <div className="hcColumnsAuto hcPointer hcRowCard">
-                                <div className="hcCell--x2"><strong>Leiden, UB : ms. VLQ 64</strong></div>
-                                <div>France</div>
-                                <div>0800-0850 $ [first half 9th century]</div>
-                            </div>
-                            <div className="hcColumnsAuto hcPointer hcRowCard">
-                                <div className="hcCell--x2"><strong>Leiden, UB : ms. VLQ 5</strong></div>
-                                <div>1810-10-14<br/></div>
-                                <div>1929<br/>Enschede</div>
-                            </div>
-                            <div className="hcColumnsAuto hcPointer hcRowCard">
-                                <div className="hcCell--x2"><strong>Leiden, UB : ms. SCA 49</strong></div>
-                                <div>southern German regions</div>
-                                <div>0800 $ [ca. 800]</div>
-                            </div>
-                            <div className="hcColumnsAuto hcPointer hcRowCard">
-                                <div className="hcCell--x2"><strong>The Hague, KB : ms. 73 J 7</strong></div>
-                                <div>[S.l.]</div>
-                                <div>1100-1200 $ [12th century]</div>
-                            </div>
-                            <div className="hcColumnsAuto hcPointer hcRowCard">
-                                <div className="hcCell--x2"><strong>Leiden, UB : ms. BPL 3072</strong></div>
-                                <div>Apennine Peninsula</div>
-                                <div>1494</div>
-                            </div>
-                            <div className="hcColumnsAuto hcPointer hcRowCard">
-                                <div className="hcCell--x2"><strong>Leiden, UB : ms. VLF 112</strong></div>
-                                <div>France</div>
-                                <div>0900-1000 $ [10th century]<br/></div>
-                            </div>
-                            <div className="hcColumnsAuto hcPointer hcRowCard">
-                                <div className="hcCell--x2"><strong>The Hague, KB : ms. 70 H 2</strong>
-                                </div>
-                                <div>[S.l.]</div>
-                                <div>1100-1200 $ [12th century]</div>
-                            </div>
+                            {loading ? (<div>Loading...</div>) : (<SearchResultList list={result}/>)}
                         </div>
-                        <div className="hcPagination">
-                            <div><a href="#">&#8592; Previous</a></div>
-                            <div><a href="#">1</a></div>
-                            <div className="bgColorBrand2"><a href="#">2</a></div>
-                            <div><a href="#">3</a></div>
-                            <div><a href="#">4</a></div>
-                            <div><a href="#">5</a></div>
-
-                            <div><a href="#">Next &#8594;</a></div>
-                        </div>
+                        {!loading && result.amount > searchStruc.page_length ? (
+                            <div className="hcPagination">
+                                {searchStruc.page < 2 ?
+                                    (<div/>) : (
+                                        <div className="hcClickable" onClick={prevPage}>&#8592; Previous</div>)}
+                                <div className="hcClickable">
+                                    <select className="hcPageSelector" onChange={(e) => selectPage(e.target.value)}>
+                                        {pages.map((pg: number) => {
+                                            if (pg === searchStruc.page) {
+                                                return (
+                                                    <option value={pg} selected>{pg}</option>)
+                                            } else {
+                                                return (
+                                                    <option value={pg}>{pg}</option>)
+                                            }
+                                        })}
+                                    </select>
+                                </div>
+                                {searchStruc.page < result.pages ? (
+                                    <div className="hcClickable" onClick={nextPage}>Next &#8594;</div>
+                                ) : (<div/>)}
+                            </div>
+                        ) : (<div/>)}
                     </div>
                 </div>
             </div>
