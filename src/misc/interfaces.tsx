@@ -143,3 +143,7 @@ export interface IRemoveFacet {
 export interface ISendPage {
     (data: number): void
 }
+
+export interface IShowDetail {
+    (data: boolean): void
+}

@@ -1,7 +1,7 @@
 import React from "react";
 import {useState, useEffect} from "react";
 import {SERVICE_SERVER, HOME} from "../misc/config";
-import {IStore, ICollection} from "../misc/interfaces";
+import {IStore, ICollection, IShowDetail} from "../misc/interfaces";
 import {IBrowseResult, IBrowseStruc, ISearchObject, IResultList, ISendPage, ISendCandidate, IFacetCandidate, ISearchValues, IResetFacets, IRemoveFacet } from "../misc/interfaces";
 import wrench from "../assets/images/wrench32.png";
 import doc from "../assets/images/linedpaper32.png";
@@ -69,9 +69,12 @@ function Search() {
             const json: IResultList = await response.json();
             setResult(json);
             setPages(createPages(json));
+            setDetails(false);
             setLoading(false);
         }
     }
+
+
 
 
     useEffect(() => {
@@ -82,6 +85,11 @@ function Search() {
         fetchData();
         },
         [storeLoading, dataRefresh]);
+
+    const showDetail: IShowDetail = (data: boolean) => {
+        setDetails(data);
+        window.scroll(0,0);
+    }
 
     const sendCandidate: ISendCandidate = (candidate: IFacetCandidate) => {
         searchBuffer = searchStruc;
@@ -261,7 +269,7 @@ function Search() {
                         </div>
 
                         <div className="hcLists hcMarginBottom2">
-                            {loading ? (<div>Loading...</div>) : (<SearchResultList list={result}/>)}
+                            {loading ? (<div>Loading...</div>) : (<SearchResultList list={result} open={showDetail}/>)}
                         </div>
                         {!loading && result.amount > searchStruc.page_length ? (
                             <div className="hcPagination">

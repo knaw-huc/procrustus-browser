@@ -1,9 +1,9 @@
 import React from "react";
-import {IResult} from "../misc/interfaces";
+import {IResult, IShowDetail} from "../misc/interfaces";
 
-function SearchResultDetail(props: {item: IResult}) {
+function SearchResultDetail(props: {item: IResult, open: IShowDetail}) {
     return (
-        <div className="hcColumnsAuto hcPointer hcRowCard">
+        <div className="hcColumnsAuto hcPointer hcRowCard" onClick={() => {props.open(true)}}>
             <div className="hcCell--x2"><strong>{props.item.title}</strong></div>
             <div>{props.item.uri}</div>
         </div>

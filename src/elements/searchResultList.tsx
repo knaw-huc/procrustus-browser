@@ -1,12 +1,12 @@
 import React from "react";
-import {IResultList} from "../misc/interfaces";
+import {IResultList, IShowDetail} from "../misc/interfaces";
 import SearchResultDetail from "./searchResultsDetail";
 
-function SearchResultList(props: {list: IResultList}) {
+function SearchResultList(props: {list: IResultList, open: IShowDetail}) {
     return (
         <div>
             {props.list.items.map((item) => {
-                return (<SearchResultDetail item={item}/>);
+                return (<SearchResultDetail item={item} open={props.open}/>);
             })}
         </div>
     )
