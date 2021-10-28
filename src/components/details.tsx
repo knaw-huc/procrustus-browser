@@ -31,12 +31,6 @@ function Details() {
                     <div className="detLabel">schema_familyName</div>
                     <div className="hcMarginBottom1">Albertanus</div>
 
-                    <div className="detLabel">schema_familyName</div>
-                    <div className="hcMarginBottom1">Albertanus</div>
-
-                    <div className="detLabel">schema_name</div>
-                    <div className="hcMarginBottom1"></div>
-
                     <div className="detLabel">_inverse_foaf_primaryTopic</div>
                     <div className="hcMarginBottom1 hcClickable">https://data.goldenagents.org/datasets/ufab7d657a250e3461361c982ce9b38f3816e0c4b/stcn_20200226/.well-known/genid/dc8a1a0aa34c5882491c2ed494399bb7_node1dupkk4p7x2118790</div>
 

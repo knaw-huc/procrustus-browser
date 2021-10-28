@@ -27,6 +27,7 @@ function Search() {
     const [dataRefresh, setDataRefresh] = useState(false);
     const [datasetIndex, setDatasetIndex] = useState(0);
     const [collections, setCollections] = useState<ICollection[]>([]);
+    const [collectionIndex, setCollectionIndex] = useState(0);
     const [esIndex, setEsIndex] = useState("none");
     //const [page, setPage] = useState(1);
     const [result, setResult] = useState<IResultList>({amount: 0} as IResultList);
@@ -159,7 +160,7 @@ function Search() {
             }
         }
         setSearchStruc(searchBuffer);
-        setRefresh(!refresh);
+        setDataRefresh(!dataRefresh);
     }
 
     function createPages(json: IResultList) {
@@ -203,14 +204,16 @@ function Search() {
                 {!storeLoading && (<div className="hcBarDataset hcBasicSideMargin">
                 <span>
                 <span className="hcSmallTxt hcTxtColorGreyMid">Dataset</span>
-                    <select className="" name="" onChange={(event) => {setDatasetIndex(event.target.selectedIndex); setRefresh(!refresh);}}>
+                    <select className="" name="" onChange={(event) => {setDatasetIndex(event.target.selectedIndex);
+                        setRefresh(!refresh);}}>
                     {store.dataSets.map((item, index) => {
                         return (<option key={index}>{item.label}</option>)
                     })}
                     </select>
                 </span><span>
                 <span className="hcSmallTxt hcTxtColorGreyMid">Collections</span>
-                    <select className="" name="" onChange={(event) => {setEsIndex(store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection); setDataRefresh(!dataRefresh);}}>
+                    <select className=""  onChange={(event) => {setEsIndex(store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection);
+                        setDataRefresh(!dataRefresh);}}>
                         {collections.map((item, index) => {
                             return (<option key={index}>{item.label}</option> )
                         })}
@@ -233,7 +236,12 @@ function Search() {
                     </div>
                     <div className="hcLayoutResults">
                         <div className="hcResultsHeader hcMarginBottom1">
-                            <div>{result.amount} Results, page {searchStruc.page} of {result.pages} pages</div>
+                            {result.amount > 9999 ? (
+                                <div>{result.amount}+ Results, page {searchStruc.page} of {result.pages} pages</div>
+                            ) : (
+                                <div>{result.amount} Results, page {searchStruc.page} of {result.pages} pages</div>
+                            )}
+
                            {/* <div><select className="" name="">
                                 <option value="">Order by Relevance</option>
                                 <option value="">Order by given name</option>
