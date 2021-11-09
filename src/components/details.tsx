@@ -1,44 +1,63 @@
 import React from "react";
-import PageHeader from "../pageElements/pageHeader";
+import {HOME, SERVICE_SERVER} from "../misc/config";
+import {useState, useEffect} from "react";
+import {ICloseDetail, IDetailItem, IResultList} from "../misc/interfaces";
 
-function Details() {
+
+function Details(props: {dataset: string, collection: string, uri: string, close: ICloseDetail, detail: boolean}) {
+    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState<IDetailItem[]>([]);
+
+    async function fetch_data() {
+        if (props.detail && loading) {
+            const url = SERVICE_SERVER + "get_item";
+            const params = {
+                dataset: props.dataset,
+                collection: props.collection,
+                uri: props.uri
+            }
+            //console.log(JSON.stringify(params));
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Origin': HOME
+                },
+                body: JSON.stringify(params)
+            });
+            const json: IDetailItem[] = await response.json();
+            setData(json);
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        fetch_data();
+    }, [loading]);
+
+
     return (
 
             <div className="hcContentContainer">
-                <h1>Albertanus</h1>
+                <div className="hcClickable" onClick={() => {props.close()}}>Back</div>
+                {loading ? (<h1>Loading...</h1>) : (
+
                 <div className="hcStackFormItems">
-                    <div className="detLabel">schema_birthDate</div>
-                    <div className="hcMarginBottom1">-</div>
-
-                    <div className="detLabel">schema_deathDate</div>
-                    <div className="hcMarginBottom1">1246</div>
-
-                    <div className="detLabel">schema_givenName</div>
-                    <div className="hcMarginBottom1">-</div>
-
-                    <div className="detLabel">rdfs_label</div>
-                    <div className="hcMarginBottom1">Albertanus (-1246)</div>
-
-                    <div className="detLabel">rdf_type</div>
-                    <div className="hcMarginBottom1 hcClickable">http://schema.org/Person</div>
-
-                    <div className="detLabel">schema_alternateNameList</div>
-                    <div className="hcMarginBottom1">- Albertano<br/>- Albertanus<br/>- Albertanus Brixiensis</div>
-
-                    <div className="detLabel">rdfs_commentList</div>
-                    <div className="hcMarginBottom1">P2P: 200 Albertanus\"%of Brescia</div>
-
-                    <div className="detLabel">schema_familyName</div>
-                    <div className="hcMarginBottom1">Albertanus</div>
-
-                    <div className="detLabel">_inverse_foaf_primaryTopic</div>
-                    <div className="hcMarginBottom1 hcClickable">https://data.goldenagents.org/datasets/ufab7d657a250e3461361c982ce9b38f3816e0c4b/stcn_20200226/.well-known/genid/dc8a1a0aa34c5882491c2ed494399bb7_node1dupkk4p7x2118790</div>
+                    {data.map((item, index) => {
+                        return (<div key={index}>
+                            <div className="detLabel">{item.notion}</div>
+                            <div className="hcMarginBottom1">
+                                {item.values.length === 0 && (<div>-</div>)}
+                            {item.values.map((value) => {
+                                return (<div>{value}</div>);
+                            })}
+                            </div></div>)
+                    })}
 
 
-
-
-
-                </div>
+                </div>)}
             </div>
 
     )

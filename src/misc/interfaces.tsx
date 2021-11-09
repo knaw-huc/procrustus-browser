@@ -59,11 +59,10 @@ export interface IDetailValuePair {
     value: string
 }
 
-export interface IDetails {
-    uri: string,
-    collection: string,
-    see_also: IDetailBrowseItem[],
-    details: IDetailValuePair[]
+
+export interface IDetailItem {
+    notion: string,
+    values: string[]
 }
 
 export interface ISearchString {
@@ -73,6 +72,7 @@ export interface ISearchString {
 
 export interface ICollection {
     collection: string,
+    collection_id: string,
     label: string
 }
 
@@ -145,5 +145,9 @@ export interface ISendPage {
 }
 
 export interface IShowDetail {
-    (data: boolean): void
+    (uri: string): void
+}
+
+export interface ICloseDetail {
+    (): void
 }

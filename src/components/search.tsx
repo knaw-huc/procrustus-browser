@@ -1,7 +1,7 @@
 import React from "react";
 import {useState, useEffect} from "react";
 import {SERVICE_SERVER, HOME} from "../misc/config";
-import {IStore, ICollection, IShowDetail} from "../misc/interfaces";
+import {IStore, ICollection, IShowDetail, ICloseDetail} from "../misc/interfaces";
 import {IBrowseResult, IBrowseStruc, ISearchObject, IResultList, ISendPage, ISendCandidate, IFacetCandidate, ISearchValues, IResetFacets, IRemoveFacet } from "../misc/interfaces";
 import wrench from "../assets/images/wrench32.png";
 import doc from "../assets/images/linedpaper32.png";
@@ -29,6 +29,9 @@ function Search() {
     const [collections, setCollections] = useState<ICollection[]>([]);
     const [collectionIndex, setCollectionIndex] = useState(0);
     const [esIndex, setEsIndex] = useState("none");
+    const [dataset, setDataset] = useState("");
+    const [collection, setCollection] = useState("");
+    const [uri, setUri] = useState("");
     //const [page, setPage] = useState(1);
     const [result, setResult] = useState<IResultList>({amount: 0} as IResultList);
     const [loading, setLoading] = useState(true);
@@ -45,6 +48,8 @@ function Search() {
             setCollections(resp_store.dataSets[0].indexes);
             setStoreLoading(false);
             setEsIndex(resp_store.dataSets[0].indexes[0].collection);
+            setDataset(resp_store.dataSets[0].dataSet);
+            setCollection(resp_store.dataSets[0].indexes[0].collection_id);
         } else {
             setCollections(store.dataSets[datasetIndex].indexes);
             setEsIndex(store.dataSets[datasetIndex].indexes[0].collection);
@@ -72,6 +77,8 @@ function Search() {
             setPages(createPages(json));
             setDetails(false);
             setLoading(false);
+            console.log(dataset);
+            console.log(collection);
         }
     }
 
@@ -87,9 +94,14 @@ function Search() {
         },
         [storeLoading, dataRefresh]);
 
-    const showDetail: IShowDetail = (data: boolean) => {
-        setDetails(data);
+    const showDetail: IShowDetail = (uri: string) => {
+        setUri(uri);
+        setDetails(true);
         window.scroll(0,0);
+    }
+
+    const closeDetail: ICloseDetail = () => {
+        setDetails(false);
     }
 
     const sendCandidate: ISendCandidate = (candidate: IFacetCandidate) => {
@@ -134,7 +146,7 @@ function Search() {
         facets = searchStruc.searchvalues as ISearchValues[];
     }
 
-    const cross: string = "[x]";
+
 
     const resetFacets: IResetFacets = () => {
         searchBuffer = searchStruc;
@@ -204,15 +216,23 @@ function Search() {
                 {!storeLoading && (<div className="hcBarDataset hcBasicSideMargin">
                 <span>
                 <span className="hcSmallTxt hcTxtColorGreyMid">Dataset</span>
-                    <select className="" name="" onChange={(event) => {setDatasetIndex(event.target.selectedIndex);
-                        setRefresh(!refresh);}}>
+                    <select className="" name="" onChange={(event) => {
+                        setDatasetIndex(event.target.selectedIndex);
+                        setDataset(store.dataSets[event.target.selectedIndex].dataSet);
+                        setCollection(store.dataSets[event.target.selectedIndex].indexes[0].collection_id);
+                        setCollectionIndex(0);
+                        setRefresh(!refresh);
+                    }}>
                     {store.dataSets.map((item, index) => {
                         return (<option key={index}>{item.label}</option>)
                     })}
                     </select>
                 </span><span>
                 <span className="hcSmallTxt hcTxtColorGreyMid">Collections</span>
-                    <select className=""  onChange={(event) => {setEsIndex(store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection);
+                    <select value={store.dataSets[datasetIndex].indexes[collectionIndex].label}  onChange={(event) => {
+                        setEsIndex(store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection);
+                        setCollectionIndex(event.target.selectedIndex);
+                        setCollection(store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection_id)
                         setDataRefresh(!dataRefresh);}}>
                         {collections.map((item, index) => {
                             return (<option key={index}>{item.label}</option> )
@@ -223,7 +243,7 @@ function Search() {
 
             </div>
 
-            {details ? (<Details/>) :
+            {details ? (<Details dataset={dataset} collection={collection} uri={uri} close={closeDetail} detail={details}/>) :
                 (<div className="hcContentContainer">
                 <div className="hcBasicSideMargin hcMarginTop4 hcMarginBottom1">
                     <h1>Search</h1>
