@@ -20,3 +20,26 @@ font-weight: bold;
 .galogo {
 height: 20px;
 }
+
+.navImage{
+display:inline-block;
+height: 28px;
+width: 28px;
+border: 1px solid #333;
+padding: 2px;
+margin-left: 8px;
+cursor: pointer;
+}
+
+.navImage img {
+width: 24px;
+height: 24px;
+}
+
+.browseTools{
+display: inline-block;
+position: absolute;
+right: 60px;
+top: 200px;
+text-align: right;
+}

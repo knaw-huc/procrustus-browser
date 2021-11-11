@@ -39,6 +39,7 @@ function Search() {
     const [pages, setPages] = useState<number[]>([]);
     const [details, setDetails] = useState(false);
 
+
     async function fetchStoreAndData() {
         if (storeLoading) {
             const url = SERVICE_SERVER + "get_store";

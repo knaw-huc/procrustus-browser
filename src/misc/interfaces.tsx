@@ -59,9 +59,15 @@ export interface IDetailValuePair {
     value: string
 }
 
+export interface IDetails {
+    title: string,
+    uri: string,
+    items: IDetailItem[]
+}
 
 export interface IDetailItem {
     notion: string,
+    label: string,
     values: string[]
 }
 
