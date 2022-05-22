@@ -7,22 +7,25 @@ import paper from "../assets/img/linedpaper32.png";
 import paper_plus from "../assets/img/linedpaperplus32.png";
 import paper_min from "../assets/img/linedpaperminus32.png";
 import back from "../assets/img/leftarrow32.png";
+import {fromBase64} from "js-base64";
 
 
-function Details(props: { dataset: string, collection: string, uri: string, close: ICloseDetail, detail: boolean }) {
+//function Details(props: { dataset: string, collection: string, uri: string, close: ICloseDetail, detail: boolean }) {
+function Details(props: {parStr: string}) {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState<IDetails>({title: "", uri: "", items: []});
     const [human, setHuman] = useState(true);
     const [complete, setComplete] = useState(false);
 
     async function fetch_data() {
-        if (props.detail && loading) {
+        if (loading) {
             const url = SERVICE_SERVER + "get_item";
-            const params = {
+            /*const params = {
                 dataset: props.dataset,
                 collection: props.collection,
                 uri: props.uri
-            }
+            }*/
+            const params = fromBase64(props.parStr);
 
             const response = await fetch(url, {
                 method: 'POST',
@@ -49,7 +52,7 @@ function Details(props: { dataset: string, collection: string, uri: string, clos
         <div className="hcContentContainer">
             <div className="browseTools">
                 <div className="navImage" onClick={() => {
-                    props.close()
+                    window.history.back();
                 }}><img src={back} alt="Back to resultlist" title="Back to resultlist"/></div>
                 <div className="navImage" onClick={() => {
                     setHuman(!human)

@@ -6,21 +6,13 @@ import {IBrowseResult, IBrowseStruc, ISearchObject, IResultList, ISendPage, ISen
 import wrench from "../assets/images/wrench32.png";
 import doc from "../assets/images/linedpaper32.png";
 import back from "../assets/images/leftarrow32.png";
-import {Base64} from "js-base64";
+import {Base64, fromBase64, toBase64} from "js-base64";
 import FreeTextFacet from "../facets/freeTextFacet";
 import SearchResultList from "../elements/searchResultList";
-import Details from "./details";
 
 
-function Search() {
+function Search(props: {parStr: string}) {
 
-    let searchBuffer: ISearchObject = {
-        searchvalues: "none",
-        page: 1,
-        page_length: 30,
-        sortorder: "title",
-        index: ""
-    };
     const [storeLoading, setStoreLoading] = useState(true);
     const [store, setStore] = useState<IStore>({"dataSets": []})
     const [refresh, setRefresh] = useState(false);
@@ -32,13 +24,27 @@ function Search() {
     const [dataset, setDataset] = useState("");
     const [collection, setCollection] = useState("");
     const [uri, setUri] = useState("");
-    //const [page, setPage] = useState(1);
+    const [page, setPage] = useState(1);
     const [result, setResult] = useState<IResultList>({amount: 0} as IResultList);
     const [loading, setLoading] = useState(true);
-    const [searchStruc, setSearchStruc] = useState(searchBuffer);
     const [pages, setPages] = useState<number[]>([]);
-    const [details, setDetails] = useState(false);
 
+    const parameters = fromBase64(props.parStr);
+    let tmpBuffer: ISearchObject = {
+        searchvalues: "none",
+        page: page,
+        page_length: 30,
+        sortorder: "title",
+        index: ""
+    };
+    if (parameters === "none") {
+        let tmpBuffer: ISearchObject = JSON.parse(parameters);
+    }
+
+    let searchBuffer: ISearchObject = tmpBuffer;
+
+
+    const [searchStruc, setSearchStruc] = useState(searchBuffer);
 
     async function fetchStoreAndData() {
         if (storeLoading) {
@@ -76,11 +82,15 @@ function Search() {
             const json: IResultList = await response.json();
             setResult(json);
             setPages(createPages(json));
-            setDetails(false);
+            //setDetails(false);
             setLoading(false);
-            console.log(dataset);
-            console.log(collection);
         }
+    }
+
+    window.onload = correctLoad;
+
+    function correctLoad() {
+        window.location.href = "#search";
     }
 
 
@@ -96,16 +106,24 @@ function Search() {
         [storeLoading, dataRefresh]);
 
     const showDetail: IShowDetail = (uri: string) => {
-        setUri(uri);
-        setDetails(true);
+        //setUri(uri);
+        //setDetails(true);
+        const paramSet = {
+            dataset: dataset,
+            collection: collection,
+            uri: uri
+        }
+        window.location.href = '#detail/' + toBase64(JSON.stringify(paramSet));
         window.scroll(0,0);
     }
 
-    const closeDetail: ICloseDetail = () => {
-        setDetails(false);
-    }
+    /*const closeDetail: ICloseDetail = () => {
+        //setDetails(false);
+        window.location.href = '#search'
+    }*/
 
     const sendCandidate: ISendCandidate = (candidate: IFacetCandidate) => {
+        setPage(1);
         searchBuffer = searchStruc;
         if (searchStruc.searchvalues === "none") {
             searchBuffer.searchvalues = [{
@@ -113,6 +131,7 @@ function Search() {
                 field: candidate.field,
                 values: [candidate.candidate]
             } as ISearchValues];
+            searchBuffer.page = 1;
             setSearchStruc(searchBuffer);
             //window.location.href = '#search/' + Base64.toBase64(JSON.stringify(searchStruc));
             setDataRefresh(!dataRefresh);
@@ -185,18 +204,21 @@ function Search() {
     }
 
     function nextPage() {
+        setPage(searchStruc.page + 1);
         goToPage(searchStruc.page + 1);
     }
 
     function selectPage(item: string) {
         const pg: number = Number(item);
         if (pg != NaN) {
+            setPage(pg);
             goToPage(pg);
         }
     }
 
     function prevPage() {
         if (searchStruc.page > 0) {
+            setPage(searchStruc.page - 1);
             goToPage(searchStruc.page - 1);
         }
     }
@@ -206,8 +228,8 @@ function Search() {
         searchBuffer = searchStruc;
         searchBuffer.page = page;
         setSearchStruc(searchBuffer);
-        setDataRefresh(!dataRefresh);
-        //window.location.href = '#search/' + Base64.toBase64(JSON.stringify(searchStruc));
+        //setDataRefresh(!dataRefresh);
+        window.location.href = '#search/' + Base64.toBase64(JSON.stringify(searchStruc));
         window.scroll(0, 0);
     }
 
@@ -218,6 +240,7 @@ function Search() {
                 <span>
                 <span className="hcSmallTxt hcTxtColorGreyMid">Dataset</span>
                     <select className="" name="" onChange={(event) => {
+                        window.location.href = "#search";
                         setDatasetIndex(event.target.selectedIndex);
                         setDataset(store.dataSets[event.target.selectedIndex].dataSet);
                         setCollection(store.dataSets[event.target.selectedIndex].indexes[0].collection_id);
@@ -231,6 +254,7 @@ function Search() {
                 </span><span>
                 <span className="hcSmallTxt hcTxtColorGreyMid">Collections</span>
                     <select value={store.dataSets[datasetIndex].indexes[collectionIndex].label}  onChange={(event) => {
+                        window.location.href = "#search";
                         setEsIndex(store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection);
                         setCollectionIndex(event.target.selectedIndex);
                         setCollection(store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection_id)
@@ -243,9 +267,7 @@ function Search() {
                 </div>)}
 
             </div>
-
-            {details ? (<Details dataset={dataset} collection={collection} uri={uri} close={closeDetail} detail={details}/>) :
-                (<div className="hcContentContainer">
+                <div className="hcContentContainer">
                 <div className="hcBasicSideMargin hcMarginTop4 hcMarginBottom1">
                     <h1>Search</h1>
                 </div>
@@ -325,7 +347,7 @@ function Search() {
                         ) : (<div/>)}
                     </div>
                 </div>
-            </div>)}
+            </div>
         </div>
     )
 }

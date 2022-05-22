@@ -3,11 +3,11 @@ import PageHeader from "../pageElements/pageHeader";
 import PageFooter from "../pageElements/pageFooter";
 import Search from "../components/search";
 
-function SearchPage() {
+function SearchPage(props: {parStr: string}) {
     return (
         <div>
             <PageHeader />
-            <Search/>
+            <Search parStr={props.parStr}/>
         </div>
     )
 }
