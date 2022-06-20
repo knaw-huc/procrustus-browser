@@ -9,6 +9,22 @@ display: inline-block;
 margin-bottom: 16px !important;
 }
 
+.hcClickableBlock {
+color: #0087d4;
+cursor: pointer;
+}
+
+.hcClickableSpan {
+color: #0087d4;
+cursor: pointer;
+display: inline;
+}
+
+.appearsInClass{
+display: block !important;
+margin-bottom: 40px !important;
+}
+
 .hcFacetValues {
 margin-right: 6px;
 }
@@ -16,6 +32,7 @@ margin-right: 6px;
 .detLabel {
 font-weight: bold;
 }
+
 
 .galogo {
 height: 20px;

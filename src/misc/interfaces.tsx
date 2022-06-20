@@ -1,35 +1,44 @@
-export interface IDataSetmetadata {
-    published: boolean,
-    title: IStringValue,
-    description: IStringValue,
-    imageUrl: IStringValue,
-    owner: IMetadataPerson,
-    contact: IMetadataPerson,
-    provenanceInfo: IProvenanceInfo,
-    license: IMetadataLicense
+export interface ICollection {
+    collection: string,
+    collection_id: string,
+    label: string
 }
 
-export interface IBrowseStruc {
-    page: number,
-    text: string;
+export interface IDataSet {
+    dataSet: string,
+    label: string,
+    indexes: ICollection[]
 }
 
-export interface IStringValue {
-    value: string
+export interface IStore {
+    dataSets: IDataSet[]
 }
 
-export interface IMetadataPerson {
-    name: IStringValue,
-    email: IStringValue
+export interface IDetails {
+    title: string,
+    uri: string,
+    items: IDetailItem[]
 }
 
-export interface IProvenanceInfo {
-    title: IStringValue,
-    body: IStringValue
+export interface IDetailItem {
+    notion: string,
+    label: string,
+    values: IDetailValue[],
 }
 
-export interface IMetadataLicense {
+export interface IDetailValue {
+    value: string,
+    link?: ILink
+}
+
+export interface ILink {
+    dataset: string,
+    collection: string,
     uri: string
+}
+
+export interface IParameter {
+    code: string;
 }
 
 export interface IBrowseResult {
@@ -54,43 +63,6 @@ export interface IDetailBrowseItem {
     index: string
 }
 
-export interface IDetailValuePair {
-    key: string,
-    value: string
-}
-
-export interface IDetails {
-    title: string,
-    uri: string,
-    items: IDetailItem[]
-}
-
-export interface IDetailItem {
-    notion: string,
-    label: string,
-    values: string[]
-}
-
-export interface ISearchString {
-    dataset_id: string,
-    page: number
-}
-
-export interface ICollection {
-    collection: string,
-    collection_id: string,
-    label: string
-}
-
-export interface IDataSet {
-    dataSet: string,
-    label: string,
-    indexes: ICollection[]
-}
-
-export interface IStore {
-    dataSets: IDataSet[]
-}
 
 export interface ISearchValues {
     name: string,
@@ -99,11 +71,63 @@ export interface ISearchValues {
 }
 
 export interface ISearchObject {
-    searchvalues: ISearchValues[] | string,
+    searchvalues: ISearchValues[],
     page: number,
     page_length: number,
     sortorder: string,
-    index: string;
+    collection_index: string;
+}
+
+export interface ISearchParams {
+    dataset: string,
+    collection: string,
+    collection_index: string,
+    page: number,
+    searchvalues: ISearchValues[]
+}
+
+export interface ICollection {
+    collection: string,
+    collection_id: string,
+    label: string
+}
+
+export interface IResetFacets {
+    (): void
+}
+
+export interface IRefresh {
+    (): void;
+}
+
+export interface IRemoveFacet {
+    (field: string, value: string): void
+}
+
+export interface ISendPage {
+    (data: number): void
+}
+
+export interface IFacetCandidate {
+    facet: string,
+    field: string,
+    candidate: string
+}
+
+
+
+export interface IBrowseStruc {
+    page: number,
+    text: string;
+}
+
+export interface ISendCandidate {
+    (data: IFacetCandidate):void
+}
+
+export interface IFacet {
+    facet: string,
+    value: string
 }
 
 export interface IResultList {
@@ -117,43 +141,6 @@ export interface IResult {
     title: string
 }
 
-export interface IFacetValues {
-    key: string,
-    doc_count: number
-}
-
-export interface IFacetCandidate {
-    facet: string,
-    field: string,
-    candidate: string
-}
-
-export interface ISendCandidate {
-    (data: IFacetCandidate):void
-}
-
-export interface ISearchValues {
-    name: string,
-    field: string,
-    values: string[]
-}
-
-export interface IResetFacets {
-    (): void
-}
-
-export interface IRemoveFacet {
-    (field: string, value: string): void
-}
-
-export interface ISendPage {
-    (data: number): void
-}
-
 export interface IShowDetail {
     (uri: string): void
-}
-
-export interface ICloseDetail {
-    (): void
 }

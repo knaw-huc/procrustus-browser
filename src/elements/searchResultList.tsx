@@ -5,8 +5,8 @@ import SearchResultDetail from "./searchResultsDetail";
 function SearchResultList(props: {list: IResultList, open: IShowDetail}) {
     return (
         <div>
-            {props.list.items.map((item) => {
-                return (<SearchResultDetail item={item} open={props.open}/>);
+            {props.list.items.map((item, index) => {
+                return (<SearchResultDetail key={index} item={item} open={props.open}/>);
             })}
         </div>
     )
