@@ -18,7 +18,7 @@ import FreeTextFacet from "../facets/freeTextFacet";
 import SearchResultList from "../elements/searchResultList";
 import {OutletProps} from "react-router-dom";
 import {Base64} from "js-base64";
-import {SERVICE_SERVER, HOME} from "../misc/config";
+import {getServiceServer, getHome} from "../misc/config";
 
 function SearchPage() {
     const params = useParams();
@@ -48,13 +48,13 @@ function SearchPage() {
 
     async function fetchData() {
         update_search_struc();
-        const url = SERVICE_SERVER + "browse";
+        const url = getServiceServer() + "browse";
         const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Origin': HOME
+                'Origin': getHome()
             },
             body: JSON.stringify(searchStruc)
         });
