@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import logo from '../assets/img/ga.png';
 import {useState} from "react";
 import {IStore, IDataSet, ICollection, ISearchParams, IRefresh} from "../misc/interfaces";
-import {SERVICE_SERVER} from "../misc/config";
+import {getServiceServer} from "../misc/config";
 import {Base64} from "js-base64";
 import {useNavigate, useParams} from "react-router-dom";
 
@@ -22,7 +22,7 @@ function PageHeader() {
 
     async function getStore() {
         if (storeLoading) {
-            const url = SERVICE_SERVER + "get_store";
+            const url = getServiceServer() + "get_store";
             const response = await fetch(url);
             const resp_store: IStore = await response.json();
             setStore(resp_store);

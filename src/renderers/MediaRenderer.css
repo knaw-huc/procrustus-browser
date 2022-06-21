@@ -1,0 +1,12 @@
+.swiper-wrapper {
+    align-items: center;
+}
+
+.swiper-slide {
+    flex-shrink: 1;
+}
+
+.slide-box {
+    width: auto;
+    max-height: 300px;
+}
