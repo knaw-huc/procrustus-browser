@@ -36,7 +36,7 @@ function PageHeader() {
 
     useEffect(() => {
         getStore();
-    }, [refresh]);
+    });
 
 
 

@@ -23,6 +23,7 @@ import {SERVICE_SERVER, HOME} from "../misc/config";
 function SearchPage() {
     const params = useParams();
     const parameters: ISearchParams = JSON.parse(Base64.decode(params.scode as string));
+    const [base, setBase] = useState("");
     const [refresh, setRefresh] = useState(false);
     const [collections, setCollections] = useState<ICollection[]>([]);
     const [collectionIndex, setCollectionIndex] = useState(0);
@@ -32,8 +33,10 @@ function SearchPage() {
     const [page, setPage] = useState(parameters.page);
     const [result, setResult] = useState<IResultList>({amount: 0} as IResultList);
     const [loading, setLoading] = useState(true);
+    const [max, setMax] = useState(0);
     const [pages, setPages] = useState<number[]>([]);
     let navigate = useNavigate();
+    document.title = "Golden Agents: search";
 
     let searchStruc: ISearchObject = {
         searchvalues: parameters.searchvalues,
@@ -44,24 +47,25 @@ function SearchPage() {
     };
 
 
-
-
     async function fetchData() {
-        update_search_struc();
-        const url = SERVICE_SERVER + "browse";
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Origin': HOME
-            },
-            body: JSON.stringify(searchStruc)
-        });
-        const json: IResultList = await response.json();
-        setResult(json);
-        setPages(createPages(json));
-        setLoading(false);
+        if (base !== params.scode as string) {
+            update_search_struc();
+            const url = SERVICE_SERVER + "browse";
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Origin': HOME
+                },
+                body: JSON.stringify(searchStruc)
+            });
+            const json: IResultList = await response.json();
+            setResult(json);
+            setPages(createPages(json));
+            setBase(params.scode as string)
+            setLoading(false);
+        }
     }
 
     function update_search_struc() {
@@ -69,8 +73,6 @@ function SearchPage() {
         searchStruc.searchvalues = parameters.searchvalues;
         searchStruc.page = parameters.page;
     }
-
-
 
 
     const sendCandidate: ISendCandidate = (candidate: IFacetCandidate) => {
@@ -116,9 +118,8 @@ function SearchPage() {
 
 
     const resetFacets: IResetFacets = () => {
-        searchStruc.page = 1;
-        searchStruc.searchvalues = [];
-        setRefresh(!refresh);
+        parameters.searchvalues = [];
+        goToPage(1);
     }
 
     const removeFacet: IRemoveFacet = (field: string, value: string) => {
@@ -133,7 +134,8 @@ function SearchPage() {
             });
         }
         //setSearchStruc(searchBuffer);
-        setRefresh(!refresh);
+        //setRefresh(!refresh);
+        goToPage(1);
     }
 
     function createPages(json: IResultList) {
@@ -151,7 +153,7 @@ function SearchPage() {
 
     function selectPage(item: string) {
         const pg: number = Number(item);
-        if (pg != NaN) {
+        if (pg !== NaN) {
             setPage(pg);
             goToPage(pg);
         }
@@ -174,7 +176,7 @@ function SearchPage() {
         window.scroll(0, 0);
     }
 
-    const showDetail: IShowDetail = ( uri: string) => {
+    const showDetail: IShowDetail = (uri: string) => {
         //setUri(uri);
         //setDetails(true);
         const paramSet = {
@@ -185,15 +187,11 @@ function SearchPage() {
         paramSet.dataset = parameters.dataset;
         paramSet.collection = parameters.collection;
         navigate('/detail/' + Base64.encode(JSON.stringify(paramSet)));
-        window.scroll(0,0);
+        window.scroll(0, 0);
     }
 
     fetchData();
 
-    useEffect(() => {
-            fetchData();
-        },
-        [refresh]);
 
 
     return (
@@ -252,14 +250,15 @@ function SearchPage() {
                                     (<div/>) : (
                                         <div className="hcClickable" onClick={prevPage}>&#8592; Previous</div>)}
                                 <div className="hcClickable">
-                                    <select className="hcPageSelector" value={parameters.page} onChange={(e) => selectPage(e.target.value)}>
+                                    <select className="hcPageSelector" value={parameters.page}
+                                            onChange={(e) => selectPage(e.target.value)}>
                                         {pages.map((pg: number, index) => {
                                             //if (pg === searchStruc.page) {
-                                             //   return (
-                                             //       <option value={pg} selected>{pg}</option>)
+                                            //   return (
+                                            //       <option value={pg} selected>{pg}</option>)
                                             //} else {
-                                                return (
-                                                    <option key={index} value={pg}>{pg}</option>)
+                                            return (
+                                                <option key={index} value={pg}>{pg}</option>)
                                             //}
                                         })}
                                     </select>

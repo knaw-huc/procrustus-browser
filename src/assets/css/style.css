@@ -33,6 +33,16 @@ margin-right: 6px;
 font-weight: bold;
 }
 
+.uriLabel {
+font-weight: bold;
+color: #aaa;
+font-size: 80%;
+}
+
+hr {
+margin-top: 40px;
+}
+
 
 .galogo {
 height: 20px;

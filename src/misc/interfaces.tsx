@@ -23,7 +23,13 @@ export interface IDetails {
 export interface IDetailItem {
     notion: string,
     label: string,
+    uri: string,
     values: IDetailValue[],
+    type: string
+}
+
+export interface ISameAsList {
+    items: IDetailItem
 }
 
 export interface IDetailValue {
