@@ -1,5 +1,5 @@
 import React from "react";
-import {HOME, SERVICE_SERVER} from "../misc/config";
+import {getHome, getServiceServer} from "../misc/config";
 import {useState, useEffect, ReactFragment} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 import {IDetailItem, IDetails, IParameter} from "../misc/interfaces";
@@ -9,6 +9,7 @@ import paper_plus from "../assets/img/linedpaperplus32.png";
 import paper_min from "../assets/img/linedpaperminus32.png";
 import back from "../assets/img/leftarrow32.png";
 import {Base64} from "js-base64";
+import Renderer from '../renderers/Renderer';
 
 
 function DetailPage() {
@@ -23,7 +24,7 @@ function DetailPage() {
 
     async function fetch_data() {
         if (loading) {
-            const url = SERVICE_SERVER + "get_human_item";
+            const url = getServiceServer() + "get_human_item";
             /*const params = {
                 dataset: props.dataset,
                 collection: props.collection,
@@ -40,7 +41,7 @@ function DetailPage() {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'Origin': HOME
+                    'Origin': getHome()
                 },
                 body: payload
             });
@@ -106,32 +107,9 @@ function DetailPage() {
                                                 <div className="uriLabel">{item.uri}</div>
                                             </div>)}
 
-                                            {(!human || item.type === "human") && (<div className="hcMarginBottom1">
-                                                {item.values.length === 0 && (<div>-</div>)}
-                                                {item.values.map((field, index) => {
-                                                    let val = field.value;
-                                                    if (field.link !== undefined) {
-                                                        if (field.link.dataset === "extern") {
-                                                            return (
-                                                                <div key={index}
-                                                                     onClick={() => {
-                                                                         window.open(val);
-                                                                     }}>{val} <span
-                                                                    className="hcClickableSpan">[➚]</span></div>);
-                                                        } else {
-                                                            return (
-                                                                <div className="hcClickableBlock" key={index}
-                                                                     onClick={() => {
-                                                                         window.location.href = '/detail/' + Base64.encode(JSON.stringify(field.link));
-                                                                     }}>{val}</div>);
-                                                        }
-                                                    } else {
-                                                        return (
-                                                            <div key={index}>{val}</div>);
-                                                    }
-
-                                                })}
-                                            </div>)}
+                                            {(!human || item.type === "human") && (
+                                                <Renderer name={item.notion === 'foaf_depiction' ? 'media' : 'default'}
+                                                          item={item} loading={<div>Loading...</div>}/>)}
                                         </div>
                                     )
                                 } else {
