@@ -1,5 +1,5 @@
 import React from "react";
-import {HOME, SERVICE_SERVER} from "../misc/config";
+import {getHome, getServiceServer} from "../misc/config";
 import {useState, useEffect, ReactFragment} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 import {IDetailItem, IDetails, IParameter} from "../misc/interfaces";
@@ -9,6 +9,7 @@ import paper_plus from "../assets/img/linedpaperplus32.png";
 import paper_min from "../assets/img/linedpaperminus32.png";
 import back from "../assets/img/leftarrow32.png";
 import {Base64} from "js-base64";
+import Renderer from '../renderers/Renderer';
 
 
 function DetailPage() {
@@ -18,12 +19,11 @@ function DetailPage() {
     const [complete, setComplete] = useState(false);
     const parStr = useParams();
     let inverseList: IDetailItem[] = [];
-    let sameAsList: IDetailItem[] = [];
 
 
     async function fetch_data() {
         if (loading) {
-            const url = SERVICE_SERVER + "get_human_item";
+            const url = getServiceServer() + "get_human_item";
             /*const params = {
                 dataset: props.dataset,
                 collection: props.collection,
@@ -40,7 +40,7 @@ function DetailPage() {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'Origin': HOME
+                    'Origin': getHome()
                 },
                 body: payload
             });
@@ -50,11 +50,6 @@ function DetailPage() {
         }
     }
 
-    if (loading) {
-        document.title = "Golden Agents: loading...";
-    } else {
-        document.title = "Golden Agents: " + data.title;
-    }
 
     useEffect(() => {
         fetch_data();
@@ -93,115 +88,44 @@ function DetailPage() {
                     <div className="hcStackFormItems">
                         {data.items.map((item, index) => {
                             if (complete || item.values.length > 0) {
-                                if (item.notion.indexOf("_inverse_") === -1 && item.label.indexOf("sameAs") === -1) {
-                                    return (
-                                        <div key={index}>
-                                            {human ? (
-                                                <div>
-                                                    {item.type === "human" && (
-                                                        <div className="detLabel">{item.label}</div>)}
-                                                </div>
-                                            ) : (<div>
-                                                <div className="detLabel">{item.label}</div>
-                                                <div className="uriLabel">{item.uri}</div>
-                                            </div>)}
+                                if (item.notion.indexOf("_inverse_") === -1 )
+                                {
+                                return (
+                                    <div key={index}>
+                                        {human ? (
+                                            <div className="detLabel">{item.label}</div>
+                                        ) : (<div className="detLabel">{item.notion}</div>)}
 
-                                            {(!human || item.type === "human") && (<div className="hcMarginBottom1">
-                                                {item.values.length === 0 && (<div>-</div>)}
-                                                {item.values.map((field, index) => {
-                                                    let val = field.value;
-                                                    if (field.link !== undefined) {
-                                                        if (field.link.dataset === "extern") {
-                                                            return (
-                                                                <div key={index}
-                                                                     onClick={() => {
-                                                                         window.open(val);
-                                                                     }}>{val} <span
-                                                                    className="hcClickableSpan">[➚]</span></div>);
-                                                        } else {
-                                                            return (
-                                                                <div className="hcClickableBlock" key={index}
-                                                                     onClick={() => {
-                                                                         window.location.href = '/detail/' + Base64.encode(JSON.stringify(field.link));
-                                                                     }}>{val}</div>);
-                                                        }
-                                                    } else {
-                                                        return (
-                                                            <div key={index}>{val}</div>);
-                                                    }
-
-                                                })}
-                                            </div>)}
-                                        </div>
-                                    )
-                                } else {
-                                    if (item.label === "sameAs") {
-                                        sameAsList.push(item);
-                                    } else {
-                                        inverseList.push(item);
-                                    }
+                                        <Renderer name={item.notion === 'foaf_depiction' ? 'media' : 'default'}
+                                                  item={item} loading={<div>Loading...</div>}/>
+                                    </div>
+                                )}
+                            else {
+                                inverseList.push(item);
                                 }
-                            }
-                        })}
+                        }})}
                     </div>
-                    <hr/>
                     <div className="hcStackFormItems">
                         {inverseList.length > 0 && (
-                            <div>
-                                <div className="detLabel">{data.title} appears in:</div>
-                                <ul className="appearsInClass">
-                                    {inverseList.map((item: IDetailItem, key) => {
-                                        return (<React.Fragment>
-                                            {item.values.map((val, index) => {
-                                                let listKey = key * 10 + index;
-                                                let retVal = val.value + " (" + item.label + ")";
-                                                if (val.link !== undefined) {
-                                                    return (<li key={listKey}><span
-                                                        className="hcClickableSpan" onClick={() => {
-                                                        window.location.href = '/detail/' + Base64.encode(JSON.stringify(val.link));
-                                                    }}>{val.value}</span> ({item.label})</li>)
-                                                } else {
-                                                    return (<li key={listKey}>{retVal}</li>)
-                                                }
+                            <div><div className="detLabel">{data.title} appears in:</div>
+                            <ul className="appearsInClass">
+                                {inverseList.map((item: IDetailItem, key) => {
+                                    return (<React.Fragment>
+                                        {item.values.map((val, index) => {
+                                            let listKey = key * 10 + index;
+                                            let retVal = item.label + ": " + val.value;
+                                            if (val.link !== undefined) {
+                                                return (<li key={listKey}>{item.label}: <span className="hcClickableSpan"  onClick={() => {
+                                                    window.location.href = '/detail/' + Base64.encode(JSON.stringify(val.link));
+                                                }}>{val.value}</span></li>)
+                                            } else {
+                                                return (<li key={listKey}>{retVal}</li>)
+                                            }
 
-                                            })}
-                                        </React.Fragment>)
-                                    })}
-                                </ul>
-                            </div>
-                        )}
-                        {sameAsList.length > 0 && (
-                            <div>
-                                <div className="detLabel">{data.title} is the same as:</div>
-
-                                    {sameAsList.map((item: IDetailItem, key) => {
-                                        return (<div>
-                                            {!human && (<div className="uriLabel">{item.uri}</div>)}
-                                            <ul className="appearsInClass">
-                                            {(!human || item.type === "human") && (<React.Fragment>
-                                            {item.values.map((val, index) => {
-                                                let listKey = key * 10 + index;
-                                                if (val.link !== undefined) {
-                                                    if (val.link.dataset === "extern") {
-                                                        return (<li key={listKey}>{val.value} <span onClick={() => {
-                                                            window.open(val.value);
-                                                        }}
-                                                            className="hcClickableSpan">[➚]</span></li>)
-                                                    } else {
-                                                        return (<li key={listKey}>{item.label}: <span
-                                                            className="hcClickableSpan" onClick={() => {
-                                                            window.location.href = '/detail/' + Base64.encode(JSON.stringify(val.link));
-                                                        }}>{val.value}</span></li>)
-                                                    }
-
-                                                } else {
-                                                    return (<li key={listKey}>{val.value}</li>)
-                                                }
-
-                                            })}
-                                        </React.Fragment>)}</ul></div>)
-                                    })}
-
+                                        })}
+                                    </React.Fragment>)
+                                })}
+                            </ul>
                             </div>
                         )}
                     </div>
