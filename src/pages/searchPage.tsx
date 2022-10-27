@@ -16,7 +16,6 @@ import {
 } from "../misc/interfaces";
 import FreeTextFacet from "../facets/freeTextFacet";
 import SearchResultList from "../elements/searchResultList";
-import {OutletProps} from "react-router-dom";
 import {Base64} from "js-base64";
 import {getServiceServer, getHome} from "../misc/config";
 

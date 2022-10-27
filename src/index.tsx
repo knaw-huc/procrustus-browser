@@ -7,6 +7,8 @@ import './assets/css/style.css';
 import App from './App';
 import DetailPage from "./pages/detailPage";
 import SearchPage from "./pages/searchPage";
+import Switch from "./pages/switch";
+
 //import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(
@@ -21,6 +23,9 @@ root.render(
                 </Route>
                 <Route path="search" element={<SearchPage/>}>
                     <Route path=":scode" element={<SearchPage/>}/>
+                </Route>
+                <Route path="switch" element={<Switch/>}>
+                    <Route path={":sw_code"} element={<Switch/>}/>
                 </Route>
                 <Route
                     path="*"

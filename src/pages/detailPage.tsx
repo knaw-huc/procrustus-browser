@@ -61,23 +61,20 @@ function DetailPage() {
 
         <div className="hcContentContainer">
             <div className="browseTools">
-                <div className="navImage" onClick={() => {
-                    window.history.back();
-                }}><img src={back} alt="Back to resultlist" title="Back to resultlist"/></div>
-                <div className="navImage" onClick={() => {
+                <div className="detailNavBtn" onClick={() => {
                     setHuman(!human)
                 }}>
                     {human ? (
-                        <img src={wrench} alt="RDF view" title="RDF view"/>
-                    ) : (<img src={paper} alt="Text view" title="Text view"/>)}
+                        <button value="RDF view">RDF view</button>
+                    ) : (<button value="RDF view">Text view</button>)}
                 </div>
-                <div className="navImage" onClick={() => {
+                <div className="detailNavBtn" onClick={() => {
                     setComplete(!complete)
                 }}>
                     {complete ? (
-                        <img src={paper_min} alt="Hide empty properties" title="Hide empty properties"/>
+                        <button value="RDF view">Hide empty properties</button>
                     ) : (
-                        <img src={paper_plus} alt="Show empty properties" title="Show empty properties"/>
+                        <button value="RDF view">Show empty properties</button>
                     )}</div>
             </div>
             {loading ? (<h1>Loading...</h1>) : (
@@ -94,9 +91,11 @@ function DetailPage() {
                                 return (
                                     <div key={index}>
                                         {human ? (
-                                            <div className="detLabel">{item.label}</div>
+                                            <div className="detLabel"><img
+                                                src="https://d33wubrfki0l68.cloudfront.net/3b6b7e1950a6d51a018ea398e2c17c5104702217/46c09/images/icons/icon_ga-property.png"
+                                                alt="Class" className="hcGaIcon"/>{item.label}</div>
                                         ) : (<div>
-                                            <div className="detLabel">{item.label}</div>
+                                            <div className="detLabel"><img src="https://d33wubrfki0l68.cloudfront.net/3b6b7e1950a6d51a018ea398e2c17c5104702217/46c09/images/icons/icon_ga-property.png" alt="Class" className="hcGaIcon"/>{item.label}</div>
                                             <div className="uriLabel">{item.uri}</div>
                                         </div>)}
 
@@ -117,7 +116,7 @@ function DetailPage() {
                     <div className="hcStackFormItems">
                         {inverseList.length > 0 && (
                             <div>
-                                <div className="detLabel">{data.title} appears in:</div>
+                                <div className="detLabel"><img src="https://d33wubrfki0l68.cloudfront.net/3b6b7e1950a6d51a018ea398e2c17c5104702217/46c09/images/icons/icon_ga-property.png" alt="Class" className="hcGaIcon"/>{data.title} appears in:</div>
                                 <ul className="appearsInClass">
                                     {inverseList.map((item: IDetailItem, key) => {
                                         return (<React.Fragment>
@@ -125,10 +124,10 @@ function DetailPage() {
                                                 let listKey = key * 10 + index;
                                                 let retVal = val.value + " (" + item.label + ")";
                                                 if (val.link !== undefined) {
-                                                    return (<li key={listKey}><span
+                                                    return (<li key={listKey}>{item.label}: <span
                                                         className="hcClickableSpan" onClick={() => {
                                                         window.location.href = '/detail/' + Base64.encode(JSON.stringify(val.link));
-                                                    }}>{val.value}</span> ({item.label})</li>)
+                                                    }}>{val.value}</span></li>)
                                                 } else {
                                                     return (<li key={listKey}>{retVal}</li>)
                                                 }
@@ -141,7 +140,7 @@ function DetailPage() {
                         )}
                         {sameAsList.length > 0 && (
                             <div>
-                                <div className="detLabel">{data.title} is the same as:</div>
+                                <div className="detLabel"><img src="https://d33wubrfki0l68.cloudfront.net/3b6b7e1950a6d51a018ea398e2c17c5104702217/46c09/images/icons/icon_ga-property.png" alt="Class" className="hcGaIcon"/>{data.title} is the same as:</div>
 
                                 {sameAsList.map((item: IDetailItem, key) => {
                                     return (<div>
