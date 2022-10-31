@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {useParams} from "react-router-dom";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter, Routes, Route, IndexRouteProps} from "react-router-dom";
 import './index.css';
 import './assets/css/style.css';
 import App from './App';
 import DetailPage from "./pages/detailPage";
 import SearchPage from "./pages/searchPage";
 import Switch from "./pages/switch";
+import Home from "./pages/home";
+import Dataset from "./pages/dataset";
 
 //import reportWebVitals from './reportWebVitals';
 
@@ -18,6 +20,7 @@ root.render(
     <BrowserRouter>
         <Routes>
             <Route path="/" element={<App/>}>
+                <Route index element={<Home/>} />
                 <Route path="detail" element={<DetailPage/>}>
                     <Route path=":code" element={<DetailPage/>}/>
                 </Route>
@@ -26,6 +29,9 @@ root.render(
                 </Route>
                 <Route path="switch" element={<Switch/>}>
                     <Route path={":sw_code"} element={<Switch/>}/>
+                </Route>
+                <Route path="dataset" element={<Dataset/>}>
+                    <Route path={":dataset_id"} element={<Dataset/>}/>
                 </Route>
                 <Route
                     path="*"

@@ -150,3 +150,30 @@ export interface IResult {
 export interface IShowDetail {
     (uri: string): void
 }
+
+export interface ICollectionProps {
+    uri: string,
+    shortenedUri: string
+    properties: IPropsItems[]
+}
+
+export interface IPropsItems {
+    uri: string,
+    shortenedUri: string,
+    density: number
+}
+
+export interface IDatasetCollections {
+    dataSetId: string,
+    dataSetName: string,
+    items: IDatasetCollectionProps[]
+}
+
+export interface IDatasetCollectionProps {
+    collectionId: string,
+    collectionListId: string,
+    shortenedUri: string,
+    itemType: string,
+    total: number,
+    title: string
+}
