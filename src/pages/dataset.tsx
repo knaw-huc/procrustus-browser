@@ -3,23 +3,47 @@ import {useNavigate} from "react-router-dom";
 import {useParams} from "react-router-dom";
 import {useState} from "react";
 import {getServiceServer} from "../misc/config";
-import {IDatasetCollections, IDatasetCollectionProps} from "../misc/interfaces";
+import {IDatasetCollections, IDatasetCollectionProps, IMetaData} from "../misc/interfaces";
 import ClassContent from "../elements/classContent";
 
 function Dataset() {
+    const nav = useNavigate();
     const params = useParams();
     const [index, setIndex] = useState(0);
     const [loading, setLoading] = useState(true);
     const SERVICE = getServiceServer();
     const [data, setData] = useState<IDatasetCollections>({dataSetId: "", dataSetName: "", items: []});
+    const [metaData, setMetaData] = useState<IMetaData>({
+        "title": "",
+        "description": "",
+        "imageUrl": "",
+        "license": "",
+        "publisher": "",
+        "creator": "",
+        "contributor": "",
+        "dataProvider": "",
+        "subject": "",
+        "source": "",
+        "created": "",
+        "modified": "",
+        "sparqlEndpoint": ""
+    })
+    const [mdLoading, setMdLoading] = useState(true);
 
     async function fetch_data() {
         const url = SERVICE + "get_entities/" + params.dataset_id;
         const response = await fetch(url);
         const json = await response.json();
         setData(json);
-        console.log(json);
         setLoading(false);
+    }
+
+    async function fetch_metadatadata() {
+        const url = SERVICE + "get_metadata/" + params.dataset_id;
+        const response = await fetch(url);
+        const json = await response.json();
+        setMetaData(json);
+        setMdLoading(false);
     }
 
     function collection_label(item: IDatasetCollectionProps) {
@@ -49,26 +73,28 @@ function Dataset() {
     useEffect(() => {
         fetch_data()
     }, [loading]);
+
+    useEffect(() => {
+        fetch_metadatadata();
+    }, [mdLoading]);
     return (
         <div>
             <div className="hcContentContainer hcMarginBottom2 hcMarginTop2">
                 <div className="hcBasicSideMargin ">
-                    <div className="hcClickable">&#9668; Back to all datasets</div>
+                    <div onClick={() => {nav("/")}} className="hcClickable">&#9668; Back to all datasets</div>
 
                 </div>
             </div>
             <main className="hcContentContainer hcMarginBottom5 hcMarginTop2">
 
-
+                {mdLoading ? (<div>Loading metadata</div>) : (
         <div className="hcBasicSideMargin hcGaLayoutSplit">
             <div>
                 <div className="hcLabel"><img
                     src="https://d33wubrfki0l68.cloudfront.net/8f5e3d2e2a41e122519fa6876cc80765dc241fad/8858e/images/icons/icon_ga-dataset.png"
                     alt="dataset" className="hcGaIcon hcGaIcon--big"/> Golden agents dataset</div>
-                <h1>Ja, ik wil</h1>
-                <p>Deze registers beslaan ruim 230 jaar (1581-1811) en bieden zeer veel details over de aanstaande bruid
-                    en bruidegom: hun leeftijd, hun beroep, waar ze vandaan kwamen, of hun ouders nog leefden, et
-                    cetera.</p>
+                <h1>{metaData.title}</h1>
+                <p>{metaData.description}</p>
 
                 <div className="hcGaLayoutSplit">
                     <a className='ga-searcChoiceLink' href='/ga-data-browser-class-detail'><strong>Browse this
@@ -81,9 +107,6 @@ function Dataset() {
             <div className="hcGaLayoutSplit">
                 <div>
                     <dl aria-label="Information about the dataset">
-                        <dt>Statements</dt>
-                        <dd>2131</dd>
-
                         <dt>License</dt>
                         <dd>CC-BY-SA</dd>
 
@@ -92,23 +115,10 @@ function Dataset() {
 
                     </dl>
 
-                </div>
-                <div>
-                    <dl aria-label="Information about the dataset">
-                        <dt>Statements</dt>
-                        <dd>2131</dd>
-
-                        <dt>License</dt>
-                        <dd>CC-BY-SA</dd>
-
-                        <dt>Organisation</dt>
-                        <dd>Huygens Institute</dd>
-
-                    </dl>
                 </div>
             </div>
 
-        </div>
+        </div>)}
 
 
         <div className="hcBasicSideMargin hcMarginTop5"><h2>Classes</h2></div>

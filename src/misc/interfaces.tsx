@@ -177,3 +177,25 @@ export interface IDatasetCollectionProps {
     total: number,
     title: string
 }
+
+export interface IMetaData  {
+    title: string,
+    description: string,
+    imageUrl: string,
+    license: string,
+    publisher: string,
+    creator: string,
+    contributor: string,
+    dataProvider: string,
+    subject: string,
+    source: string,
+    created: string,
+    modified: string,
+    sparqlEndpoint: string
+}
+
+export interface IMetaDataListItem {
+    dataset: string,
+    metadata: IMetaData
+}
+
