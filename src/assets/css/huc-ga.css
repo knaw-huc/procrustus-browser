@@ -2125,7 +2125,7 @@ background-color: #fff;
 color: #3e3e3e;
 }
 
-a {
+a, .ga-searcChoiceLink {
 color: hsl(200deg, 90%, 30%);
 }
 

@@ -46,6 +46,28 @@ function Dataset() {
         setMdLoading(false);
     }
 
+    function goSearch() {
+        switch (params.dataset_id) {
+            case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__rijksmuseum":
+                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX3JpamtzbXVzZXVtIiwiY29sbGVjdGlvbiI6Imh0dHBfX193d3dfb3BlbmFyY2hpdmVzX29yZ19vcmVfdGVybXNfQWdncmVnYXRpb24iLCJjb2xsZWN0aW9uX2luZGV4Ijoicmlqa3NtdXNldW1faHR0cF9fX3d3d19vcGVuYXJjaGl2ZXNfb3JnX29yZV90ZXJtc19hZ2dyZWdhdGlvbiIsInBhZ2UiOjEsInNlYXJjaHZhbHVlcyI6W119");
+                break;
+            case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__stcn":
+                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX3N0Y24iLCJjb2xsZWN0aW9uIjoic2NoZW1hX1Bvc3RhbEFkZHJlc3MiLCJjb2xsZWN0aW9uX2luZGV4Ijoic3Rjbl9zY2hlbWFfcG9zdGFsYWRkcmVzcyIsInBhZ2UiOjEsInNlYXJjaHZhbHVlcyI6W119");
+                break;
+            case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__schrijverskabinet":
+                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX3NjaHJpanZlcnNrYWJpbmV0IiwiY29sbGVjdGlvbiI6InNjaGVtYV9TY2hvbGFybHlBcnRpY2xlIiwiY29sbGVjdGlvbl9pbmRleCI6InNjaHJpanZlcnNrYWJpbmV0X3NjaGVtYV9zY2hvbGFybHlhcnRpY2xlIiwicGFnZSI6MSwic2VhcmNodmFsdWVzIjpbXX0=");
+                break;
+            case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__notarissennetwerk":
+                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX25vdGFyaXNzZW5uZXR3ZXJrIiwiY29sbGVjdGlvbiI6ImJpb19EaXZvcmNlIiwiY29sbGVjdGlvbl9pbmRleCI6Im5vdGFyaXNzZW5uZXR3ZXJrX2Jpb19kaXZvcmNlIiwicGFnZSI6MSwic2VhcmNodmFsdWVzIjpbXX0=");
+                break;
+            case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__jaikwil":
+                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX2phaWt3aWwiLCJjb2xsZWN0aW9uIjoidGhlc19CcnVpZGVnb20iLCJjb2xsZWN0aW9uX2luZGV4IjoiamFpa3dpbF90aGVzX2JydWlkZWdvbSIsInBhZ2UiOjEsInNlYXJjaHZhbHVlcyI6W119");
+                break;
+
+
+        }
+    }
+
     function collection_label(item: IDatasetCollectionProps) {
         if (item.title !== null) {
             return item.title;
@@ -97,8 +119,8 @@ function Dataset() {
                 <p>{metaData.description}</p>
 
                 <div className="hcGaLayoutSplit">
-                    <a className='ga-searcChoiceLink' href='/ga-data-browser-class-detail'><strong>Browse this
-                        dataset</strong> <br/><small>Browse trought the content of this dataset</small></a>
+                    <div onClick={() => {goSearch()}} className='ga-searcChoiceLink hcDataSetHeaderLink'><strong>Browse this
+                        dataset</strong> <br/><small>Browse trought the content of this dataset</small></div>
                     <a href="https://ga-wp3.sd.di.huc.knaw.nl/" className="ga-searcChoiceLink"><strong>Query this
                         dataset</strong><br/><small>Use SPARQL or use the querybuilder if your not familiar
                         SPARQL.</small></a>
@@ -114,6 +136,12 @@ function Dataset() {
                         <dd>Huygens Institute</dd>
 
                     </dl>
+
+                </div>
+            </div>
+            <div className="hcGaLayoutSplit">
+                <div>
+                    {metaData.imageUrl.indexOf("https:") > -1 ? (<img className="datasetMetadataImg" src={metaData.imageUrl}/>) : (<div/>)}
 
                 </div>
             </div>

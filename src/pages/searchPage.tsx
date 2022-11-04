@@ -20,8 +20,15 @@ import {Base64} from "js-base64";
 import {getServiceServer, getHome} from "../misc/config";
 
 function SearchPage() {
+    let navigate = useNavigate();
     const params = useParams();
-    const parameters: ISearchParams = JSON.parse(Base64.decode(params.scode as string));
+    let tmpParameter = "";
+    if (params.scode === undefined) {
+        tmpParameter = "eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX2phaWt3aWwiLCJjb2xsZWN0aW9uIjoidGhlc19CcnVpZGVnb20iLCJjb2xsZWN0aW9uX2luZGV4IjoiamFpa3dpbF90aGVzX2JydWlkZWdvbSIsInBhZ2UiOjEsInNlYXJjaHZhbHVlcyI6W119";
+    } else {
+        tmpParameter = params.scode as string;
+    }
+    const parameters: ISearchParams = JSON.parse(Base64.decode(tmpParameter));
     const [base, setBase] = useState("");
     const [refresh, setRefresh] = useState(false);
     const [collections, setCollections] = useState<ICollection[]>([]);
@@ -34,7 +41,6 @@ function SearchPage() {
     const [loading, setLoading] = useState(true);
     const [max, setMax] = useState(0);
     const [pages, setPages] = useState<number[]>([]);
-    let navigate = useNavigate();
     document.title = "Golden Agents: search";
 
     let searchStruc: ISearchObject = {

@@ -92,3 +92,8 @@ font-weight: bold;
 cursor: pointer;
 }
 
+.datasetMetadataImg{
+display: inline-block;
+width: 200px;
+}
+

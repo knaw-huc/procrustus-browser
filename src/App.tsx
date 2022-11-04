@@ -14,7 +14,7 @@ function App() {
 
   return (
    <div>
-     <Header/>
+     <PageHeader/>
       <Outlet/>
    </div>
   );

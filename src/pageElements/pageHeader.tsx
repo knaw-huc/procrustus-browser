@@ -43,7 +43,7 @@ function PageHeader() {
 
     return (
         <div>
-            <div className="hcContentContainer bgColorBrand1 hcMarginBottom1">
+            {/*<div className="hcContentContainer bgColorBrand1 hcMarginBottom1">
                 <header className=" hcPageHeaderSimple hcBasicSideMargin">
                     <div className="hcBrand">
                         <div className="hcBrandLogo">
@@ -55,12 +55,23 @@ function PageHeader() {
                         <a href="">About</a>
                     </nav>
                 </header>
-            </div>
-            <div className="hcContentContainer hcMarginBottom5 hcBorderBottom">
+            </div>*/}
+            <header className="hcGaHeaderGen bgColorBrand1">
+                <div className="hcGaHeaderGen__Logo">
+                    <img
+                        src="https://d33wubrfki0l68.cloudfront.net/ed17091f189bc37f34f94717f506432501dbc722/d072a/images/logo-ga.png"
+                        alt="Golden Agents logo"/>
+                </div>
+                <div className="hcGaHeaderGen__ToolName hcDataSetHeaderLink" onClick={() => {navigate("/")}}>
+                    Dataset Browser
+                </div>
+            </header>
+            {document.location.href.indexOf("/search") !== -1 ? (
+            <div className="hcContentContainer hcMarginBottom5 hcBorderBottom hcMarginTop2">
                 {!storeLoading && (<div className="hcBarDataset hcBasicSideMargin">
                 <span>
                 <span className="hcSmallTxt hcTxtColorGreyMid">Dataset</span>
-                    <select className="" name="" defaultValue={store.dataSets[datasetIndex].label} onChange={(event) => {
+                    <select className="" name="" value={store.dataSets[datasetIndex].label} onChange={(event) => {
                         //window.location.href = "#search";
                         setDatasetIndex(event.target.selectedIndex);
                         setDataset(store.dataSets[event.target.selectedIndex].dataSet);
@@ -84,7 +95,7 @@ function PageHeader() {
                     </select>
                 </span><span>
                 <span className="hcSmallTxt hcTxtColorGreyMid">Collections</span>
-                    <select defaultValue={store.dataSets[datasetIndex].indexes[collectionSelectIndex].label}  onChange={(event) => {
+                    <select value={store.dataSets[datasetIndex].indexes[collectionSelectIndex].label}  onChange={(event) => {
                         setCollectionIndex(store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection);
                         setCollection(store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection_id);
                         setCollectionSelectIndex(event.target.selectedIndex);
@@ -104,7 +115,8 @@ function PageHeader() {
                     </select>
                 </span>
                 </div>)}
-            </div></div>
+            </div>) : (<div/>)}
+        </div>
     )
 }
 
