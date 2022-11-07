@@ -180,7 +180,7 @@ export interface IDatasetCollectionProps {
 
 export interface IMetaData  {
     title: string,
-    description: string,
+    description: string[],
     imageUrl: string,
     license: string,
     publisher: string,
@@ -197,5 +197,10 @@ export interface IMetaData  {
 export interface IMetaDataListItem {
     dataset: string,
     metadata: IMetaData
+}
+
+export interface IStoreIndexes {
+    dataset: number,
+    collection: number
 }
 

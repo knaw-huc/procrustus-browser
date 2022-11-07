@@ -34,6 +34,7 @@ function PageHeader() {
         }
     }
 
+
     useEffect(() => {
         getStore();
     });
@@ -66,7 +67,7 @@ function PageHeader() {
                     Dataset Browser
                 </div>
             </header>
-            {document.location.href.indexOf("/search") !== -1 ? (
+            {(document.location.href.indexOf("/search") !== -1 || document.location.href.indexOf("/detail") !== -1 ) ? (
             <div className="hcContentContainer hcMarginBottom5 hcBorderBottom hcMarginTop2">
                 {!storeLoading && (<div className="hcBarDataset hcBasicSideMargin">
                 <span>
@@ -93,8 +94,8 @@ function PageHeader() {
                         return (<option key={index}>{item.label}</option>)
                     })}
                     </select>
-                </span><span>
-                <span className="hcSmallTxt hcTxtColorGreyMid">Collections</span>
+                </span>
+                <span><span className="hcSmallTxt hcTxtColorGreyMid">Collections</span>
                     <select value={store.dataSets[datasetIndex].indexes[collectionSelectIndex].label}  onChange={(event) => {
                         setCollectionIndex(store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection);
                         setCollection(store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection_id);

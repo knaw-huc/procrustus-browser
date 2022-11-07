@@ -10,6 +10,7 @@ import SearchPage from "./pages/searchPage";
 import Switch from "./pages/switch";
 import Home from "./pages/home";
 import Dataset from "./pages/dataset";
+import Spquery from "./pages/spquery";
 
 //import reportWebVitals from './reportWebVitals';
 
@@ -32,6 +33,9 @@ root.render(
                 </Route>
                 <Route path="dataset" element={<Dataset/>}>
                     <Route path={":dataset_id"} element={<Dataset/>}/>
+                </Route>
+                <Route path="query" element={<Spquery/>}>
+                    <Route path={":dataset_id"} element={<Spquery/>}/>
                 </Route>
                 <Route
                     path="*"

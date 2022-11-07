@@ -1,21 +1,12 @@
 import React from "react";
 import {useNavigate} from "react-router-dom";
 import {IMetaData} from "../misc/interfaces";
+import {licence} from "../misc/functions";
 
 function DatasetCard(props: {dataset: string, metadata: IMetaData}) {
     let nav = useNavigate();
 
-    function licence(lic: string) {
-        switch (lic) {
-            case "https://creativecommons.org/licenses/by-sa/4.0/":
-                return "CC BY-SA 4.0";
-            case "https://creativecommons.org/publicdomain/zero/1.0/":
-                return "CC0 1.0";
-                default:
-                    return "";
 
-        }
-    }
     return (
         <li className="hcCardGaDataset incCard hcCardGaDataset--float" aria-label="Dataset card">
             <div><img
@@ -29,11 +20,10 @@ function DatasetCard(props: {dataset: string, metadata: IMetaData}) {
             <dl aria-label="Information about the dataset">
                 <dt>License</dt>
                 <dd className="hcDataSetHeaderLink" onClick={() => {window.open(props.metadata.license)}}>{licence(props.metadata.license)}</dd>
-                <dt>Data provider</dt>
-                <dd>{props.metadata.dataProvider}</dd>
                 <dt>Publisher</dt>
                 <dd>{props.metadata.publisher}</dd>
-
+                <dt>Data provider</dt>
+                <dd>{props.metadata.dataProvider}</dd>
             </dl>
         </li>
     )

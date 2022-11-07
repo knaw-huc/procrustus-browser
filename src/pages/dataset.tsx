@@ -2,9 +2,10 @@ import React, {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {useParams} from "react-router-dom";
 import {useState} from "react";
-import {getServiceServer} from "../misc/config";
+import {getServiceServer, getHome} from "../misc/config";
 import {IDatasetCollections, IDatasetCollectionProps, IMetaData} from "../misc/interfaces";
 import ClassContent from "../elements/classContent";
+import {licence} from "../misc/functions";
 
 function Dataset() {
     const nav = useNavigate();
@@ -15,7 +16,7 @@ function Dataset() {
     const [data, setData] = useState<IDatasetCollections>({dataSetId: "", dataSetName: "", items: []});
     const [metaData, setMetaData] = useState<IMetaData>({
         "title": "",
-        "description": "",
+        "description": [],
         "imageUrl": "",
         "license": "",
         "publisher": "",
@@ -116,32 +117,43 @@ function Dataset() {
                     src="https://d33wubrfki0l68.cloudfront.net/8f5e3d2e2a41e122519fa6876cc80765dc241fad/8858e/images/icons/icon_ga-dataset.png"
                     alt="dataset" className="hcGaIcon hcGaIcon--big"/> Golden agents dataset</div>
                 <h1>{metaData.title}</h1>
-                <p>{metaData.description}</p>
+                {metaData.description.map((line, i) => {
+                    return (<div className="hcDescLine" key={i}>{line}</div>)
+                })}
 
-                <div className="hcGaLayoutSplit">
-                    <div onClick={() => {goSearch()}} className='ga-searcChoiceLink hcDataSetHeaderLink'><strong>Browse this
-                        dataset</strong> <br/><small>Browse trought the content of this dataset</small></div>
-                    <a href="https://ga-wp3.sd.di.huc.knaw.nl/" className="ga-searcChoiceLink"><strong>Query this
-                        dataset</strong><br/><small>Use SPARQL or use the querybuilder if your not familiar
-                        SPARQL.</small></a>
-                </div>
             </div>
             <div className="hcGaLayoutSplit">
                 <div>
                     <dl aria-label="Information about the dataset">
                         <dt>License</dt>
-                        <dd>CC-BY-SA</dd>
-
-                        <dt>Organisation</dt>
-                        <dd>Huygens Institute</dd>
+                        <dd className="hcDataSetHeaderLink" onClick={() => {window.open(metaData.license)}}>{licence(metaData.license)}</dd>
+                        <dt>Data provider</dt>
+                        <dd>{metaData.dataProvider}</dd>
+                        <dt>Publisher</dt>
+                        <dd>{metaData.publisher}</dd>
+                        <dt>Creator</dt>
+                        <dd>{metaData.creator}</dd>
+                        {metaData.contributor !== "" && <dt>Contributor</dt>}
+                        {metaData.contributor !== "" && <dd>{metaData.contributor}</dd>}
+                        {metaData.subject !== "" && <dt>Subject</dt>}
+                        {metaData.subject !== "" && <dd>{metaData.subject}</dd>}
+                        {metaData.source !== "" && <dt>Source</dt>}
+                        {metaData.source !== "" && <dd  className="hcDataSetHeaderLink" onClick={() => {window.open(metaData.source)}}>{metaData.source}</dd>}
 
                     </dl>
 
+                        <div onClick={() => {goSearch()}} className='ga-searcChoiceLink hcDataSetHeaderLink hcMarginTop3'><strong>Browse this
+                            dataset</strong> <br/><small>Browse trough the content of this dataset</small></div>
+                        <div onClick={() => {window.open(getHome() + "/query/" + params.dataset_id)}} className='ga-searcChoiceLink hcDataSetHeaderLink hcMarginTop1'><strong>Query this
+                            dataset</strong><br/><small>Use SPARQL or use the querybuilder if your not familiar with
+                            SPARQL.</small></div>
+
                 </div>
+
             </div>
             <div className="hcGaLayoutSplit">
                 <div>
-                    {metaData.imageUrl.indexOf("https:") > -1 ? (<img className="datasetMetadataImg" src={metaData.imageUrl}/>) : (<div/>)}
+                    {(metaData.imageUrl !== null && metaData.imageUrl.indexOf("https:") > -1) ? (<img className="datasetMetadataImg" src={metaData.imageUrl}/>) : (<div/>)}
 
                 </div>
             </div>
