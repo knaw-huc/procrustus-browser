@@ -1,0 +1,18 @@
+version: '2.1'
+
+networks:
+  timbuctoo-network:
+    name: timbuctoo-network
+
+
+services:
+  browser:
+    image: registry.diginfra.net/tsd/ga-browser:1.0
+    container_name: browser_app
+    restart: always
+    environment:
+      - VIRTUAL_HOST=data.goldenagents.org
+      - REACT_APP_SERVICE_SERVER=https://proservice.sd.di.huc.knaw.nl/
+      - REACT_APP_HOME=https://data.goldenagents.org
+    networks:
+      - timbuctoo-network

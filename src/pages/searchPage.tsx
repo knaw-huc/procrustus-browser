@@ -18,6 +18,7 @@ import FreeTextFacet from "../facets/freeTextFacet";
 import SearchResultList from "../elements/searchResultList";
 import {Base64} from "js-base64";
 import {getServiceServer, getHome} from "../misc/config";
+import Store from "../elements/store";
 
 function SearchPage() {
     let navigate = useNavigate();
@@ -201,6 +202,7 @@ function SearchPage() {
 
     return (
         <div>
+            <Store params={parameters}/>
             <div className="hcContentContainer">
                 <div className="hcBasicSideMargin hcMarginTop1 hcMarginBottom1">
                     <h1>Search</h1>

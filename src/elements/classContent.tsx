@@ -14,7 +14,6 @@ function ClassContent(props: {dataset: string, collection: string, label: string
         const response = await fetch(url);
         const json = await response.json();
         setData(json);
-        console.log(json);
         setLoading(false);
     }
 

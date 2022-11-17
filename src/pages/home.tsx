@@ -9,11 +9,12 @@ function Home() {
     const [loading, setLoading] = useState(true);
 
     async function fetchData() {
-            const url = getServiceServer() + "get_metadata/all";
-            const response = await fetch(url);
-            const json: IMetaDataListItem[] = await response.json();
-            setMetadata(json);
-            setLoading(false);
+        const url = getServiceServer() + "get_metadata/all";
+        const response = await fetch(url);
+        const json: IMetaDataListItem[] = await response.json();
+        setMetadata(json);
+        setLoading(false);
+
     }
 
     useEffect(() => {
@@ -28,7 +29,6 @@ function Home() {
                     <h1>Datasets of Golden Agents</h1>
                     <p>Access to distributed, heterogeneous resources (both existing and new) on creative industries in
                         the Dutch Golden Age.</p>
-                    <p><a href="">Watch an introduction video</a></p>
 
                 </div>
             </main>

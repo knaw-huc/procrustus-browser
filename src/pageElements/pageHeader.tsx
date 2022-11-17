@@ -5,6 +5,7 @@ import {IStore, IDataSet, ICollection, ISearchParams, IRefresh} from "../misc/in
 import {getServiceServer} from "../misc/config";
 import {Base64} from "js-base64";
 import {useNavigate, useParams} from "react-router-dom";
+import down_arrow from '../assets/img/icon_arrow-down.png';
 
 function PageHeader() {
 
@@ -40,8 +41,6 @@ function PageHeader() {
     });
 
 
-
-
     return (
         <div>
             {/*<div className="hcContentContainer bgColorBrand1 hcMarginBottom1">
@@ -63,17 +62,65 @@ function PageHeader() {
                         src="https://d33wubrfki0l68.cloudfront.net/ed17091f189bc37f34f94717f506432501dbc722/d072a/images/logo-ga.png"
                         alt="Golden Agents logo"/>
                 </div>
-                <div className="hcGaHeaderGen__ToolName hcDataSetHeaderLink" onClick={() => {navigate("/")}}>
+                <div className="hcGaHeaderGen__ToolName hcDataSetHeaderLink" onClick={() => {
+                    navigate("/")
+                }}>
                     Dataset Browser
                 </div>
+
+                <nav className="hcGaHeaderGen__Nav">
+
+                    <div className="hcDropList hcGaHeader__dropdown">
+                        <button type="button" name="button" aria-label="open menu item" className="">About <img
+                            src={down_arrow} alt=""/></button>
+                        <div className="hcDropList__list">
+                            <a href="https://www.goldenagents.org/tools/dataset-browser/" target="_blank">About this
+                                tool</a>
+                            <a href="https://ga-wp3.sd.di.huc.knaw.nl/" target="_blank">About the Golden Agents
+                                Project</a>
+                            <a href="https://www.goldenagents.org/" target="_blank">Goldenagents.org</a>
+                        </div>
+                    </div>
+
+
+                    <div className="hcDropList hcGaHeader__dropdown">
+                        <button type="button" name="button" aria-label="open menu item" className="">More tools <img
+                            src={down_arrow} alt=""/></button>
+                        <div className="hcDropList__list">
+                            <a href="https://www.goldenagents.org/tools/dataset-browser/" target="_blank">Dataset
+                                Browser<br/>
+                                <small>Explore the Golden Agents datasets.</small></a>
+                            <a href="https://ga-wp3.sd.di.huc.knaw.nl/" target="_blank">Golden Agent Search<br/>
+                                <small>Use SparQL or a querybuilder to anwser your research question. Our agents search
+                                    overmultiple datasets.</small></a>
+                            <a href="https://lenticularlens.goldenagents.org" target="_blank">Lenticular Lens<br/>
+                                <small>A dataset alignment tool. It offers context-dependent user-guided entity matching
+                                    across multiple datasets.</small></a>
+                            <a href="https://github.com/proycon/analiticcl" target="_blank">Analiticcl<br/>
+                                <small>Analiticcl is an approximate string matching or fuzzy-matching system that can be
+                                    used for spelling correction or text normalisation
+                                </small></a>
+                        </div>
+                    </div>
+
+
+                    <div className="hcDropList hcGaHeader__dropdown">
+                        <button type="button" name="button" aria-label="open menu item" className="">Help <img
+                            src={down_arrow} alt=""/>
+                        </button>
+                        <div className="hcDropList__list">
+                        </div>
+                    </div>
+                </nav>
+
+
             </header>
-            {(document.location.href.indexOf("/search") !== -1 || document.location.href.indexOf("/detail") !== -1 ) ? (
-            <div className="hcContentContainer hcMarginBottom5 hcBorderBottom hcMarginTop2">
-                {!storeLoading && (<div className="hcBarDataset hcBasicSideMargin">
+            {/*{(document.location.href.indexOf("/search") !== -1 || document.location.href.indexOf("/detail") !== -1) ? (
+                <div className="hcContentContainer hcMarginBottom5 hcBorderBottom hcMarginTop2">
+                    {!storeLoading && (<div className="hcBarDataset hcBasicSideMargin">
                 <span>
                 <span className="hcSmallTxt hcTxtColorGreyMid">Dataset</span>
                     <select className="" name="" value={store.dataSets[datasetIndex].label} onChange={(event) => {
-                        //window.location.href = "#search";
                         setDatasetIndex(event.target.selectedIndex);
                         setDataset(store.dataSets[event.target.selectedIndex].dataSet);
                         setCollection(store.dataSets[event.target.selectedIndex].indexes[0].collection_id);
@@ -95,28 +142,29 @@ function PageHeader() {
                     })}
                     </select>
                 </span>
-                <span><span className="hcSmallTxt hcTxtColorGreyMid">Collections</span>
-                    <select value={store.dataSets[datasetIndex].indexes[collectionSelectIndex].label}  onChange={(event) => {
-                        setCollectionIndex(store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection);
-                        setCollection(store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection_id);
-                        setCollectionSelectIndex(event.target.selectedIndex);
-                        let struc:ISearchParams = {
-                            dataset: dataset,
-                            collection: store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection_id,
-                            collection_index: store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection,
-                            page: 1,
-                            searchvalues: []
-                        }
-                        navigate("search/" + Base64.encode(JSON.stringify(struc)));
-                        setRefresh(!refresh)
-                    }}>
+                        <span><span className="hcSmallTxt hcTxtColorGreyMid">Collections</span>
+                    <select value={store.dataSets[datasetIndex].indexes[collectionSelectIndex].label}
+                            onChange={(event) => {
+                                setCollectionIndex(store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection);
+                                setCollection(store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection_id);
+                                setCollectionSelectIndex(event.target.selectedIndex);
+                                let struc: ISearchParams = {
+                                    dataset: dataset,
+                                    collection: store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection_id,
+                                    collection_index: store.dataSets[datasetIndex].indexes[event.target.selectedIndex].collection,
+                                    page: 1,
+                                    searchvalues: []
+                                }
+                                navigate("search/" + Base64.encode(JSON.stringify(struc)));
+                                setRefresh(!refresh)
+                            }}>
                         {collections.map((item, index) => {
-                            return (<option key={index}>{item.label}</option> )
+                            return (<option key={index}>{item.label}</option>)
                         })}
                     </select>
                 </span>
-                </div>)}
-            </div>) : (<div/>)}
+                    </div>)}
+                </div>) : (<div/>)}*/}
         </div>
     )
 }

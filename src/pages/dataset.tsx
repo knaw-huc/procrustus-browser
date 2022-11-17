@@ -50,20 +50,39 @@ function Dataset() {
     function goSearch() {
         switch (params.dataset_id) {
             case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__rijksmuseum":
-                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX3JpamtzbXVzZXVtIiwiY29sbGVjdGlvbiI6Imh0dHBfX193d3dfb3BlbmFyY2hpdmVzX29yZ19vcmVfdGVybXNfQWdncmVnYXRpb24iLCJjb2xsZWN0aW9uX2luZGV4Ijoicmlqa3NtdXNldW1faHR0cF9fX3d3d19vcGVuYXJjaGl2ZXNfb3JnX29yZV90ZXJtc19hZ2dyZWdhdGlvbiIsInBhZ2UiOjEsInNlYXJjaHZhbHVlcyI6W119");
+                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX3JpamtzbXVzZXVtIiwiY29sbGVjdGlvbiI6ImVkbV9BZ2VudCIsImNvbGxlY3Rpb25faW5kZXgiOiJyaWprc211c2V1bV9lZG1fYWdlbnQiLCJwYWdlIjoxLCJzZWFyY2h2YWx1ZXMiOltdfQ==");
                 break;
             case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__stcn":
-                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX3N0Y24iLCJjb2xsZWN0aW9uIjoic2NoZW1hX1Bvc3RhbEFkZHJlc3MiLCJjb2xsZWN0aW9uX2luZGV4Ijoic3Rjbl9zY2hlbWFfcG9zdGFsYWRkcmVzcyIsInBhZ2UiOjEsInNlYXJjaHZhbHVlcyI6W119");
+                nav("/search/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX3N0Y24iLCJjb2xsZWN0aW9uIjoic2NoZW1hX0Jvb2siLCJjb2xsZWN0aW9uX2luZGV4Ijoic3Rjbl9zY2hlbWFfYm9vayIsInBhZ2UiOjEsInNlYXJjaHZhbHVlcyI6W119");
                 break;
             case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__schrijverskabinet":
-                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX3NjaHJpanZlcnNrYWJpbmV0IiwiY29sbGVjdGlvbiI6InNjaGVtYV9TY2hvbGFybHlBcnRpY2xlIiwiY29sbGVjdGlvbl9pbmRleCI6InNjaHJpanZlcnNrYWJpbmV0X3NjaGVtYV9zY2hvbGFybHlhcnRpY2xlIiwicGFnZSI6MSwic2VhcmNodmFsdWVzIjpbXX0=");
+                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX3NjaHJpanZlcnNrYWJpbmV0IiwiY29sbGVjdGlvbiI6InNjaGVtYV9QZXJzb24iLCJjb2xsZWN0aW9uX2luZGV4Ijoic2NocmlqdmVyc2thYmluZXRfc2NoZW1hX3BlcnNvbiIsInBhZ2UiOjEsInNlYXJjaHZhbHVlcyI6W119");
                 break;
             case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__notarissennetwerk":
-                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX25vdGFyaXNzZW5uZXR3ZXJrIiwiY29sbGVjdGlvbiI6ImJpb19EaXZvcmNlIiwiY29sbGVjdGlvbl9pbmRleCI6Im5vdGFyaXNzZW5uZXR3ZXJrX2Jpb19kaXZvcmNlIiwicGFnZSI6MSwic2VhcmNodmFsdWVzIjpbXX0=");
+                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX25vdGFyaXNzZW5uZXR3ZXJrIiwiY29sbGVjdGlvbiI6InBudl9QZXJzb25OYW1lIiwiY29sbGVjdGlvbl9pbmRleCI6Im5vdGFyaXNzZW5uZXR3ZXJrX3Budl9wZXJzb25uYW1lIiwicGFnZSI6MSwic2VhcmNodmFsdWVzIjpbXX0=");
                 break;
             case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__jaikwil":
-                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX2phaWt3aWwiLCJjb2xsZWN0aW9uIjoidGhlc19CcnVpZGVnb20iLCJjb2xsZWN0aW9uX2luZGV4IjoiamFpa3dpbF90aGVzX2JydWlkZWdvbSIsInBhZ2UiOjEsInNlYXJjaHZhbHVlcyI6W119");
+                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX2phaWt3aWwiLCJjb2xsZWN0aW9uIjoicG52X1BlcnNvbk5hbWUiLCJjb2xsZWN0aW9uX2luZGV4IjoiamFpa3dpbF9wbnZfcGVyc29ubmFtZSIsInBhZ2UiOjEsInNlYXJjaHZhbHVlcyI6W119");
                 break;
+            case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__bredius":
+                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX2JyZWRpdXMiLCJjb2xsZWN0aW9uIjoic2NoZW1hX1BlcnNvbiIsImNvbGxlY3Rpb25faW5kZXgiOiJicmVkaXVzX3NjaGVtYV9wZXJzb24iLCJwYWdlIjoxLCJzZWFyY2h2YWx1ZXMiOltdfQ==");
+                break;
+            case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__corporatiestukken":
+                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX2NvcnBvcmF0aWVzdHVra2VuIiwiY29sbGVjdGlvbiI6InBudl9QZXJzb25OYW1lIiwiY29sbGVjdGlvbl9pbmRleCI6ImNvcnBvcmF0aWVzdHVra2VuX3Budl9wZXJzb25uYW1lIiwicGFnZSI6MSwic2VhcmNodmFsdWVzIjpbXX0=");
+                break;
+            case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__ggd":
+                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX2dnZCIsImNvbGxlY3Rpb24iOiJzY2hlbWFfUGVyc29uIiwiY29sbGVjdGlvbl9pbmRleCI6ImdnZF9zY2hlbWFfcGVyc29uIiwicGFnZSI6MSwic2VhcmNodmFsdWVzIjpbXX0=");
+                break;
+            case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__ecartico":
+                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX2VjYXJ0aWNvIiwiY29sbGVjdGlvbiI6Imh0dHBzX19fc2NoZW1hX29yZ19QZXJzb24iLCJjb2xsZWN0aW9uX2luZGV4IjoiZWNhcnRpY29faHR0cHNfX19zY2hlbWFfb3JnX3BlcnNvbiIsInBhZ2UiOjEsInNlYXJjaHZhbHVlcyI6W119");
+                break;
+            case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__onstage":
+                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX29uc3RhZ2UiLCJjb2xsZWN0aW9uIjoiaHR0cHNfX19zY2hlbWFfb3JnX1BlcnNvbiIsImNvbGxlY3Rpb25faW5kZXgiOiJvbnN0YWdlX2h0dHBzX19fc2NoZW1hX29yZ19wZXJzb24iLCJwYWdlIjoxLCJzZWFyY2h2YWx1ZXMiOltdfQ==");
+                break;
+            case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__nta":
+                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX250YSIsImNvbGxlY3Rpb24iOiJzY2hlbWFfUGVyc29uIiwiY29sbGVjdGlvbl9pbmRleCI6Im50YV9zY2hlbWFfcGVyc29uIiwicGFnZSI6MSwic2VhcmNodmFsdWVzIjpbXX0=");
+                break;
+
 
 
         }
@@ -145,8 +164,7 @@ function Dataset() {
                         <div onClick={() => {goSearch()}} className='ga-searcChoiceLink hcDataSetHeaderLink hcMarginTop3'><strong>Browse this
                             dataset</strong> <br/><small>Browse trough the content of this dataset</small></div>
                         <div onClick={() => {window.open(getHome() + "/query/" + params.dataset_id)}} className='ga-searcChoiceLink hcDataSetHeaderLink hcMarginTop1'><strong>Query this
-                            dataset</strong><br/><small>Use SPARQL or use the querybuilder if your not familiar with
-                            SPARQL.</small></div>
+                            dataset</strong><br/><small>Use SPARQL in Yasgui.</small></div>
 
                 </div>
 

@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  browser:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: browser_app
+    restart: always
+    ports:
+      - 80:80

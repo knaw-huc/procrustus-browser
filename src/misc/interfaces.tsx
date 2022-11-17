@@ -178,6 +178,10 @@ export interface IDatasetCollectionProps {
     title: string
 }
 
+export interface ITitle {
+    value: string
+}
+
 export interface IMetaData  {
     title: string,
     description: string[],
