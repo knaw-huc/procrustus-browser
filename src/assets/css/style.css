@@ -102,3 +102,8 @@ display: inline-block;
 margin-bottom: 5px;
 }
 
+.yasgui span{
+display: inline;
+padding-right: unset;
+}
+
