@@ -28,7 +28,7 @@ function ClassContent(props: {dataset: string, collection: string, label: string
     return (
         <div className="hcTabContent hcClrBg_Grey05 hcBasicPading" id="tab-content-dwc_col_Persons">
             <h2>{props.label} ({props.total})</h2>
-            <div className="hcUriType">dwc_col_Persons</div>
+            <div className="hcUriType">{props.dataset}</div>
             Members of KNAW and Dutch scientific societies and Dutch instrument makers<br/>
 
 

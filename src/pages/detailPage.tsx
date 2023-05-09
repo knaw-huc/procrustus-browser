@@ -77,7 +77,7 @@ function DetailPage() {
                         <button value="RDF view">Show empty properties</button>
                     )}</div>
             </div>
-            {loading ? (<h1>Loading...</h1>) : (
+            {loading ? (<div className="hcContentContainer hcMarginBottom5 hcBorderBottom hcMarginTop5"><h1>Loading...</h1></div>) : (
                 <div className="hcContentContainer hcMarginBottom5 hcBorderBottom hcMarginTop5" onClick={() => {window.history.back();}}>
                     <div className="hcClickable hcMarginBottom5">Back to results</div>
                     <h2>{data.title} <span className="hcClickable" onClick={() => {

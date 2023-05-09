@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {useParams} from "react-router-dom";
 import {useState} from "react";
+import {useRef} from "react";
 import {getServiceServer, getHome} from "../misc/config";
 import {IDatasetCollections, IDatasetCollectionProps, IMetaData} from "../misc/interfaces";
 import ClassContent from "../elements/classContent";
@@ -31,6 +32,7 @@ function Dataset() {
         "sparqlEndpoint": ""
     })
     const [mdLoading, setMdLoading] = useState(true);
+    const classRef = useRef();
 
     async function fetch_data() {
         const url = SERVICE + "get_entities/" + params.dataset_id;
@@ -83,10 +85,18 @@ function Dataset() {
             case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__nta":
                 nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX250YSIsImNvbGxlY3Rpb24iOiJzY2hlbWFfUGVyc29uIiwiY29sbGVjdGlvbl9pbmRleCI6Im50YV9zY2hlbWFfcGVyc29uIiwicGFnZSI6MSwic2VhcmNodmFsdWVzIjpbXX0=");
                 break;
-
-
+            case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__saa":
+                console.log("OK");
+                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX3NhYSIsImNvbGxlY3Rpb24iOiJycHBfQWdlbnQiLCJjb2xsZWN0aW9uX2luZGV4Ijoic2FhX3JwcF9hZ2VudCIsInBhZ2UiOjEsInNlYXJjaHZhbHVlcyI6W119");
+                break;
 
         }
+    }
+
+    function selectClass(index: number) {
+        setIndex(index);
+        // @ts-ignore: Object is possibly 'null'.
+        const anchor = document.getElementById("classList").scrollIntoView();
     }
 
     function collection_label(item: IDatasetCollectionProps) {
@@ -120,6 +130,7 @@ function Dataset() {
     useEffect(() => {
         fetch_metadatadata();
     }, [mdLoading]);
+    // @ts-ignore
     return (
         <div>
             <div className="hcContentContainer hcMarginBottom2 hcMarginTop2">
@@ -180,7 +191,7 @@ function Dataset() {
         </div>)}
 
 
-        <div className="hcBasicSideMargin hcMarginTop5"><h2>Classes</h2></div>
+        <div className="hcBasicSideMargin hcMarginTop5"><h2 id="classList">Classes</h2></div>
 
         <div className="hcTabs hcTabsVert ">
 
@@ -188,7 +199,7 @@ function Dataset() {
                 {loading ? (<div>Loading...</div>) :
                     (<div>
                         {data.items.map((item, index) => {
-                            return (<div className="hcTabLabel" id="tab-list-dwc_col_Persons" key={index} onClick={() => {setIndex(index)}}><img
+                            return (<div className="hcTabLabel" id="tab-list-dwc_col_Persons" key={index} onClick={() => {selectClass(index)}}><img
                                 src="https://d33wubrfki0l68.cloudfront.net/3c2fb16a8dfe7a5599a2178f96f7bc657c8172f2/a6676/images/icons/icon_ga-class.png"
                                 alt="Class" className="hcGaIcon"/>{collection_label(item)}</div>)
                         })}

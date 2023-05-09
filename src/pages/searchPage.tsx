@@ -192,7 +192,7 @@ function SearchPage() {
         }
         paramSet.dataset = parameters.dataset;
         paramSet.collection = parameters.collection;
-        navigate('/detail/' + Base64.encode(JSON.stringify(paramSet)));
+        navigate('/detail/' + Base64.encodeURL(JSON.stringify(paramSet)));
         window.scroll(0, 0);
     }
 
