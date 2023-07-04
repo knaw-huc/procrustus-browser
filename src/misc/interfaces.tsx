@@ -208,3 +208,18 @@ export interface IStoreIndexes {
     collection: number
 }
 
+export interface ISwitchItem {
+    index: string,
+    title: string,
+    uri: string,
+    tb: {
+        dataSet: string,
+        label: string,
+        index: {
+            collection: string,
+            collection_id: string,
+            label: string
+        }
+    }
+}
+

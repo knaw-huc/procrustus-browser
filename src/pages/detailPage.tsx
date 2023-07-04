@@ -15,12 +15,24 @@ import Renderer from '../renderers/Renderer';
 function DetailPage() {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState<IDetails>({title: "", uri: "", items: []});
-    const [human, setHuman] = useState(true);
+    const [human, setHuman] = useState(get_human());
     const [complete, setComplete] = useState(false);
     const parStr = useParams();
     let inverseList: IDetailItem[] = [];
     let sameAsList: IDetailItem[] = [];
 
+    function get_human():boolean {
+        if (localStorage.getItem('ga_human') === null) {
+            localStorage.setItem('ga_human', 'true');
+            return true;
+        } else {
+            if (localStorage.getItem('ga_human') === 'true') {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 
     async function fetch_data() {
         if (loading) {
@@ -62,6 +74,11 @@ function DetailPage() {
         <div className="hcContentContainer">
             <div className="browseTools">
                 <div className="detailNavBtn" onClick={() => {
+                    if (human) {
+                        localStorage.setItem('ga_human', 'false');
+                    } else {
+                        localStorage.setItem('ga_human', 'true');
+                    }
                     setHuman(!human)
                 }}>
                     {human ? (
@@ -78,8 +95,8 @@ function DetailPage() {
                     )}</div>
             </div>
             {loading ? (<div className="hcContentContainer hcMarginBottom5 hcBorderBottom hcMarginTop5"><h1>Loading...</h1></div>) : (
-                <div className="hcContentContainer hcMarginBottom5 hcBorderBottom hcMarginTop5" onClick={() => {window.history.back();}}>
-                    <div className="hcClickable hcMarginBottom5">Back to results</div>
+                <div className="hcContentContainer hcMarginBottom5 hcBorderBottom hcMarginTop5" >
+                    <div className="hcClickable hcMarginBottom5" onClick={() => {window.history.back();}}>Back to results</div>
                     <h2>{data.title} <span className="hcClickable" onClick={() => {
                         window.open(data.uri)
                     }}>[➚]</span></h2>

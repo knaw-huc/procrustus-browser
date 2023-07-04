@@ -52,6 +52,8 @@ function Store(props: { params: ISearchParams }) {
     }
 
 
+
+
     useEffect(() => {
         getStore();
     }, [refresh]);
