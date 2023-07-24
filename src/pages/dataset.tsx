@@ -86,8 +86,13 @@ function Dataset() {
                 nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX250YSIsImNvbGxlY3Rpb24iOiJzY2hlbWFfUGVyc29uIiwiY29sbGVjdGlvbl9pbmRleCI6Im50YV9zY2hlbWFfcGVyc29uIiwicGFnZSI6MSwic2VhcmNodmFsdWVzIjpbXX0=");
                 break;
             case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__saa":
-                console.log("OK");
                 nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX3NhYSIsImNvbGxlY3Rpb24iOiJycHBfQWdlbnQiLCJjb2xsZWN0aW9uX2luZGV4Ijoic2FhX3JwcF9hZ2VudCIsInBhZ2UiOjEsInNlYXJjaHZhbHVlcyI6W119");
+                break;
+            case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__poc":
+                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX3BvYyIsImNvbGxlY3Rpb24iOiJzY2hlbWFfUGVyc29uIiwiY29sbGVjdGlvbl9pbmRleCI6InBvY19zY2hlbWFfcGVyc29uIiwicGFnZSI6MSwic2VhcmNodmFsdWVzIjpbXX0=");
+                break;
+            case "u692bc364e9d7fa97b3510c6c0c8f2bb9a0e5123b__htr":
+                nav("/search/eyJkYXRhc2V0IjoidTY5MmJjMzY0ZTlkN2ZhOTdiMzUxMGM2YzBjOGYyYmI5YTBlNTEyM2JfX2h0ciIsImNvbGxlY3Rpb24iOiJodHRwc19fX2RhdGFfZ29sZGVuYWdlbnRzX29yZ19vbnRvbG9neV9ycHBfUGVyc29uIiwiY29sbGVjdGlvbl9pbmRleCI6Imh0cl9odHRwc19fX2RhdGFfZ29sZGVuYWdlbnRzX29yZ19vbnRvbG9neV9ycHBfcGVyc29uIiwicGFnZSI6MSwic2VhcmNodmFsdWVzIjpbXX0=");
                 break;
 
         }
