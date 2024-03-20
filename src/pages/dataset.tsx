@@ -180,7 +180,7 @@ function Dataset() {
 
                         <div onClick={() => {goSearch()}} className='ga-searcChoiceLink hcDataSetHeaderLink hcMarginTop3'><strong>Browse this
                             dataset</strong> <br/><small>Browse trough the content of this dataset</small></div>
-                        <div onClick={() => {window.open(getHome() + "/query/" + encodeURIComponent(metaData.sparqlEndpoint))}} className='ga-searcChoiceLink hcDataSetHeaderLink hcMarginTop1'><strong>Query this
+                        <div onClick={() => {window.open(getHome() + "query/" + encodeURIComponent(metaData.sparqlEndpoint))}} className='ga-searcChoiceLink hcDataSetHeaderLink hcMarginTop1'><strong>Query this
                             dataset</strong><br/><small>Use SPARQL in Yasgui.</small></div>
 
                 </div>
